@@ -594,7 +594,7 @@
                             if (showcase.scrollLeft >= 2 * setWidth) {
                                 showcase.scrollLeft -= setWidth;
                             }
-                        }, 10);
+                        }, 1);
                     },
                     // Pauses the automatic scrolling
                     pauseScroll() {
@@ -608,7 +608,6 @@
                     // Update featured projects and scrolling when returning to home page
                     currentPage(newVal) {
                         if (newVal === 'home') {
-                            this.displayedProjects = this.projects.slice(0, 3);
                             this.startScroll();
                         } else {
                             this.pauseScroll();
@@ -625,7 +624,8 @@
                     });
 
                     // Initialize featured projects for the home page
-                    this.displayedProjects = this.projects.slice(0, 3);
+                    this.displayedProjects = this.projects.slice(0, 333);
+                    console.log('Featured Projects:', this.displayedProjects);
 
                     // Start scrolling when the component is mounted and on the home page
                     if (this.currentPage === 'home') {
