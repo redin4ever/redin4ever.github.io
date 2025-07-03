@@ -55,20 +55,13 @@
             }
         }
 
-        /* Custom scrollbar for the horizontal project showcase */
+        /* Hide scrollbar for the horizontal project showcase */
+        .project-showcase-scroll {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
         .project-showcase-scroll::-webkit-scrollbar {
-            height: 8px;
-        }
-        .project-showcase-scroll::-webkit-scrollbar-track {
-            background: #e0e0e0;
-            border-radius: 10px;
-        }
-        .project-showcase-scroll::-webkit-scrollbar-thumb {
-            background: #a0a0a0;
-            border-radius: 10px;
-        }
-        .project-showcase-scroll::-webkit-scrollbar-thumb:hover {
-            background: #707070;
+            display: none; /* Chrome, Safari, Opera */
         }
 
         /* Smooth scroll behavior for the showcase */
@@ -90,7 +83,7 @@
                 <!-- Mobile Menu Button -->
                 <!-- The lg:hidden class ensures this button is hidden on large screens and visible on smaller screens. -->
                 <!-- Added inline-block and z-10 to ensure proper display and layering. -->
-                <button @click="toggleNav" class="text-white lg:hidden focus:outline-none inline-block relative z-10">
+                <button @click="toggleNav" class="text-white lg:hidden focus:outline-none block relative z-10 flex-shrink-0">
                     <!-- Hamburger icon - no rotation -->
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -136,8 +129,8 @@
                     </div>
                     <div id="projectShowcase" class="project-showcase-scroll flex overflow-x-auto pb-4 px-4 space-x-6"
                          @mouseenter="pauseScroll" @mouseleave="startScroll">
-                        <!-- Project Card Loop for horizontal scroll -->
-                        <div v-for="project in projects.slice(0, 5)" :key="project.id" @click="viewProject(project)"
+                        <!-- Render projects three times for seamless infinite scroll -->
+                        <div v-for="(project, index) in projects.concat(projects, projects)" :key="project.id + '-' + index" @click="viewProject(project)"
                              class="flex-none w-72 bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer transform hover:scale-105 transition-all duration-300 border border-gray-200 hover:border-purple-500">
                             <img :src="project.imageUrl" :alt="project.title" class="w-full h-40 object-cover">
                             <div class="p-4">
@@ -152,13 +145,6 @@
                                 </div>
                                 <p class="text-xs text-gray-500 mt-1">{{ Math.ceil((project.raised / project.goal) * 100) }}% funded</p>
                             </div>
-                        </div>
-                        <!-- If there are more projects than shown, add a "View All" card -->
-                        <div v-if="projects.length > 5" @click="currentPage = 'discover'"
-                             class="flex-none w-72 bg-gray-100 rounded-xl shadow-lg overflow-hidden cursor-pointer flex flex-col items-center justify-center text-center p-4 transform hover:scale-105 transition-all duration-300 border border-gray-200 hover:border-purple-500">
-                            <svg class="w-16 h-16 text-gray-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-                            <span class="text-xl font-semibold text-gray-700">View All Projects</span>
-                            <span class="text-sm text-gray-500 mt-2">Explore the full list of innovations.</span>
                         </div>
                     </div>
                 </div>
@@ -593,14 +579,25 @@
                     const showcase = document.getElementById('projectShowcase');
                     if (!showcase) return; // Exit if element not found
 
+                    // Calculate the width of a single full set of project cards
+                    // We assume all cards are w-72 (288px) and space-x-6 (24px)
+                    // We need to measure the actual scrollWidth of one set of projects
+                    // To do this reliably, we can get the scrollWidth of the container
+                    // and divide by the number of times the content is duplicated.
+                    // If projects.length is 0, this will cause issues, but we have sample data.
+                    const singleProjectCardWidth = 288 + 24; // w-72 (288px) + space-x-6 (24px)
+                    const originalContentWidth = this.projects.length * singleProjectCardWidth;
+
+
                     this.scrollInterval = setInterval(() => {
-                        // Scroll by a small amount
                         showcase.scrollLeft += this.scrollSpeed * this.scrollDirection;
 
-                        // Check if scrolled to the end (or near the end to account for fractional pixels)
-                        // If at the end, reset to the beginning for a continuous loop
-                        if (showcase.scrollLeft + showcase.clientWidth >= showcase.scrollWidth - 1) { // -1 to account for potential rounding issues
-                            showcase.scrollLeft = 0; // Loop back to start
+                        // If we've scrolled past the first full set of original content,
+                        // jump back to the beginning of the second set for seamless looping.
+                        // The total scrollable width is 3x the original content width.
+                        // We reset when we pass the width of one original set.
+                        if (showcase.scrollLeft >= originalContentWidth) {
+                            showcase.scrollLeft = 0; // Reset to the beginning of the "next" cycle
                         }
                     }, 20); // Adjust interval for desired speed (lower value = faster, smoother)
                 },
