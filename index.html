@@ -569,40 +569,66 @@
                         this.currentPage = 'discover'; // Go back to discover page
                     },
                     // Starts the automatic scrolling of the project showcase
-                    startScroll() {
-                        // Clear any existing interval to prevent multiple intervals running
-                        if (this.scrollInterval) {
-                            clearInterval(this.scrollInterval);
-                        }
-
-                        const showcase = document.getElementById('projectShowcase');
-                        if (!showcase) return; // Exit if element not found
-
-                        // Calculate the width of the first set of project cards
-                        const singleProjectCardWidth = 288 + 24; // w-72 (288px) + space-x-6 (24px)
-                        const setLength = this.displayedProjects.length;
-                        const setWidth = setLength * singleProjectCardWidth;
-
-                        // Start at the first set
-                        if (showcase.scrollLeft < setWidth || showcase.scrollLeft >= 2 * setWidth) {
-                            showcase.scrollLeft = setWidth;
-                        }
-
-                        this.scrollInterval = setInterval(() => {
-                            showcase.scrollLeft += this.scrollSpeed * this.scrollDirection;
-                            // If we've scrolled past the second set, jump back by setWidth (seamless)
-                            if (showcase.scrollLeft >= 2 * setWidth) {
-                                showcase.scrollLeft -= setWidth;
-                            }
-                        }, 1);
-                    },
-                    // Pauses the automatic scrolling
-                    pauseScroll() {
-                        if (this.scrollInterval) {
-                            clearInterval(this.scrollInterval);
-                            this.scrollInterval = null;
-                        }
+                startScroll() {
+                    if (this.scrollInterval) {
+                        clearInterval(this.scrollInterval);
                     }
+
+                    const showcase = document.getElementById('projectShowcase');
+                    if (!showcase) return;
+
+                    const singleProjectCardWidth = 288 + 24;
+                    const setLength = this.displayedProjects.length;
+                    const setWidth = setLength * singleProjectCardWidth;
+
+                    if (showcase.scrollLeft < setWidth || showcase.scrollLeft >= 2 * setWidth) {
+                        showcase.scrollLeft = setWidth;
+                    }
+
+                    this.scrollInterval = setInterval(() => {
+                        showcase.scrollLeft += this.scrollSpeed * this.scrollDirection;
+                    }, 1);
+
+                    // Add event listeners for hover and proximity pause
+                    this.addHoverAndProximityListeners(showcase);
+                },
+
+                pauseScroll() {
+                    if (this.scrollInterval) {
+                        clearInterval(this.scrollInterval);
+                        this.scrollInterval = null;
+                    }
+                },
+
+                resumeScroll() {
+                    if (!this.scrollInterval) {
+                        this.startScroll();
+                    }
+                },
+
+                addHoverAndProximityListeners(showcase) {
+                    // Pause on hover
+                    showcase.addEventListener('mouseenter', this.pauseScroll.bind(this));
+                    showcase.addEventListener('mouseleave', this.resumeScroll.bind(this));
+
+                    // Pause when mouse is within 100px of the element
+                    document.addEventListener('mousemove', (e) => {
+                        const rect = showcase.getBoundingClientRect();
+                        const buffer = 100;
+                        const isNear =
+                            e.clientX >= rect.left - buffer &&
+                            e.clientX <= rect.right + buffer &&
+                            e.clientY >= rect.top - buffer &&
+                            e.clientY <= rect.bottom + buffer;
+
+                        if (isNear) {
+                            this.pauseScroll();
+                        } else {
+                            this.resumeScroll();
+                        }
+                    });
+                }
+
                 },
                 watch: {
                     // Update featured projects and scrolling when returning to home page
@@ -624,7 +650,7 @@
                     });
 
                     // Initialize featured projects for the home page
-                    this.displayedProjects = this.projects.slice(0, 333);
+                    this.displayedProjects = this.projects.slice(0, 10);
                     console.log('Featured Projects:', this.displayedProjects);
 
                     // Start scrolling when the component is mounted and on the home page
