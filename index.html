@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kickstarter Clone</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Vue.js CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        /* Custom styles for the Inter font and general body */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f7f7; /* Light gray background */
+            color: #333; /* Darker text color */
+        }
+        /* Ensure the app container takes full width */
+        #app {
+            min-height: 100vh; /* Ensure it takes at least full viewport height */
+            display: flex;
+            flex-direction: column;
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Specific styles for hamburger menu dropdown animation */
+        .nav-links-container {
+            max-height: 0; /* Hidden by default on mobile */
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out; /* Smooth transition for dropdown */
+        }
+        .nav-links-container.open {
+            max-height: 500px; /* A value large enough to contain all links when open */
+        }
+
+        /* Ensure the menu is display:flex on mobile when it's supposed to be visible */
+        /* Tailwind's lg:flex handles desktop display */
+        @media (max-width: 1023px) { /* Corresponds to Tailwind's lg breakpoint */
+            .nav-links-container {
+                display: flex; /* Always flex on mobile, height controlled by max-height */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Navbar Component -->
+        <nav class="bg-gradient-to-r from-purple-600 to-indigo-700 p-4 shadow-lg">
+            <div class="container mx-auto flex flex-wrap items-center justify-between">
+                <!-- Logo/Brand -->
+                <a href="#" @click.prevent="currentPage = 'home'" class="text-white text-3xl font-bold rounded-lg px-3 py-1 hover:bg-white hover:text-purple-700 transition-all duration-300">
+                    Kickstarter <span class="text-xl font-normal">Clone</span>
+                </a>
+
+                <!-- Mobile Menu Button -->
+                <button @click="toggleNav" class="text-white lg:hidden focus:outline-none">
+                    <!-- Hamburger icon - no rotation -->
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+
+                <!-- Navigation Links -->
+                <div :class="{'nav-links-container': true, 'open': isNavOpen}"
+                     class="w-full lg:flex lg:items-center lg:w-auto mt-4 lg:mt-0 flex-col lg:flex-row space-y-3 lg:space-y-0 lg:space-x-8">
+                    <a href="#" @click.prevent="currentPage = 'home'; isNavOpen = false;" class="text-white hover:text-purple-200 text-lg font-medium py-2 px-3 rounded-md transition-colors duration-200">Home</a>
+                    <a href="#" @click.prevent="currentPage = 'discover'; isNavOpen = false;" class="text-white hover:text-purple-200 text-lg font-medium py-2 px-3 rounded-md transition-colors duration-200">Discover</a>
+                    <a href="#" @click.prevent="currentPage = 'startProject'; isNavOpen = false;" class="text-white hover:text-purple-200 text-lg font-medium py-2 px-3 rounded-md transition-colors duration-200">Start a Project</a>
+                    <a href="#" @click.prevent="currentPage = 'aboutUs'; isNavOpen = false;" class="text-white hover:text-purple-200 text-lg font-medium py-2 px-3 rounded-md transition-colors duration-200">About Us</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="flex-grow container mx-auto p-6">
+            <!-- Home Page -->
+            <section v-if="currentPage === 'home'" class="text-center py-16 bg-white rounded-xl shadow-md">
+                <h1 class="text-5xl font-extrabold text-gray-800 mb-6 leading-tight">Bring Your Ideas to Life</h1>
+                <p class="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
+                    Kickstarter is a global community that helps bring creative projects to life.
+                    Explore millions of projects, or start your own.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+                    <button @click="currentPage = 'discover'" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 text-lg">
+                        Discover Projects
+                    </button>
+                    <button @click="currentPage = 'startProject'" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 text-lg">
+                        Start Your Project
+                    </button>
+                </div>
+            </section>
+
+            <!-- Discover Projects Page -->
+            <section v-if="currentPage === 'discover'" class="py-8">
+                <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Explore Amazing Projects</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Project Card Loop -->
+                    <div v-for="project in projects" :key="project.id" @click="viewProject(project)"
+                         class="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer transform hover:scale-105 transition-all duration-300 border border-gray-200 hover:border-purple-500">
+                        <img :src="project.imageUrl" :alt="project.title" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-semibold text-gray-900 mb-3">{{ project.title }}</h3>
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-3">{{ project.description }}</p>
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="text-lg font-bold text-purple-600">${{ project.raised.toLocaleString() }}</div>
+                                <div class="text-sm text-gray-500">of ${{ project.goal.toLocaleString() }} goal</div>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-purple-600 h-2.5 rounded-full" :style="{ width: (project.raised / project.goal * 100) + '%' }"></div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2">{{ Math.ceil((project.raised / project.goal) * 100) }}% funded</p>
+                            <p class="text-sm text-gray-500 mt-2">{{ project.backers }} backers</p>
+                            <p class="text-sm text-gray-500 mt-2">{{ project.daysLeft }} days left</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Project Detail Page -->
+            <section v-if="currentPage === 'projectDetail' && selectedProject" class="py-8 bg-white rounded-xl shadow-md p-8">
+                <button @click="currentPage = 'discover'" class="mb-6 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full transition-colors duration-200 flex items-center">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Back to Projects
+                </button>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div>
+                        <img :src="selectedProject.imageUrl" :alt="selectedProject.title" class="w-full h-96 object-cover rounded-lg shadow-md mb-6">
+                        <h2 class="text-4xl font-bold text-gray-900 mb-4">{{ selectedProject.title }}</h2>
+                        <p class="text-gray-700 text-lg mb-6">{{ selectedProject.description }}</p>
+                        <p class="text-gray-600 text-base mb-2"><strong>Category:</strong> {{ selectedProject.category }}</p>
+                        <p class="text-gray-600 text-base mb-2"><strong>Location:</strong> {{ selectedProject.location }}</p>
+                        <p class="text-gray-600 text-base mb-2"><strong>Creator:</strong> {{ selectedProject.creator }}</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-inner">
+                        <div class="text-3xl font-extrabold text-purple-700 mb-3">${{ selectedProject.raised.toLocaleString() }}</div>
+                        <div class="text-lg text-gray-600 mb-4">pledged of ${{ selectedProject.goal.toLocaleString() }} goal</div>
+                        <div class="w-full bg-gray-200 rounded-full h-3.5 mb-2">
+                            <div class="bg-purple-600 h-3.5 rounded-full" :style="{ width: (selectedProject.raised / selectedProject.goal * 100) + '%' }"></div>
+                        </div>
+                        <p class="text-sm text-gray-500 mb-4">{{ Math.ceil((selectedProject.raised / selectedProject.goal) * 100) }}% funded</p>
+
+                        <div class="text-3xl font-extrabold text-gray-800 mb-3">{{ selectedProject.backers }}</div>
+                        <div class="text-lg text-gray-600 mb-4">backers</div>
+
+                        <div class="text-3xl font-extrabold text-gray-800 mb-3">{{ selectedProject.daysLeft }}</div>
+                        <div class="text-lg text-gray-600 mb-6">days to go</div>
+
+                        <button class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300 text-xl">
+                            Back this project
+                        </button>
+                        <p class="text-center text-sm text-gray-500 mt-4">All or nothing. This project will only be funded if it reaches its goal by {{ selectedProject.endDate }}.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Start a Project Page -->
+            <section v-if="currentPage === 'startProject'" class="py-16 bg-white rounded-xl shadow-md p-8 text-center">
+                <h2 class="text-4xl font-bold text-gray-800 mb-6">Ready to Start Your Project?</h2>
+                <p class="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
+                    Bring your creative project to life with the support of our global community.
+                    Whether it's art, design, film, music, or technology, we're here to help you get funded.
+                </p>
+                <div class="flex flex-col items-center space-y-6">
+                    <div class="bg-purple-100 p-6 rounded-lg shadow-inner w-full max-w-md">
+                        <h3 class="text-2xl font-semibold text-purple-800 mb-4">How it Works:</h3>
+                        <ul class="text-left text-gray-700 space-y-3">
+                            <li class="flex items-start">
+                                <span class="text-purple-600 text-xl mr-3">🚀</span>
+                                <span><strong>Create your project:</strong> Tell your story, set a funding goal, and offer rewards.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-purple-600 text-xl mr-3">🤝</span>
+                                <span><strong>Build your community:</strong> Share your project with friends, family, and the world.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-purple-600 text-xl mr-3">💰</span>
+                                <span><strong>Get funded:</strong> If you reach your goal, you keep the funds to make your dream a reality!</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 text-lg">
+                        Get Started Now
+                    </button>
+                </div>
+            </section>
+
+            <!-- About Us Page -->
+            <section v-if="currentPage === 'aboutUs'" class="py-16 bg-white rounded-xl shadow-md p-8 text-center">
+                <h2 class="text-4xl font-bold text-gray-800 mb-6">About Our Kickstarter Clone</h2>
+                <p class="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
+                    This is a simplified, front-end only demonstration of a Kickstarter-like platform, built with Vue.js and Tailwind CSS.
+                    It showcases basic project listing, detail viewing, and navigation.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-inner">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">Our Mission</h3>
+                        <p class="text-gray-700">
+                            To empower creators to bring their innovative ideas to life by connecting them with a passionate community of backers.
+                            We believe in the power of collective support to foster creativity and innovation.
+                        </p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg shadow-inner">
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">Technologies Used</h3>
+                        <ul class="list-disc list-inside text-gray-700 space-y-2">
+                            <li><strong>Vue.js 3:</strong> For reactive components and state management.</li>
+                            <li><strong>HTML5:</strong> For the semantic structure of the web page.</li>
+                            <li><strong>Tailwind CSS:</strong> For utility-first, responsive styling.</li>
+                            <li><strong>JavaScript:</strong> For core logic and interactivity.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white p-6 text-center mt-auto rounded-t-xl shadow-inner">
+            <div class="container mx-auto">
+                <p>&copy; 2025 Kickstarter Clone. All rights reserved. Built with Vue.js & Tailwind CSS.</p>
+                <div class="flex justify-center space-x-6 mt-4">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Contact Us</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    currentPage: 'home', // Controls which section is visible ('home', 'discover', 'projectDetail', 'startProject', 'aboutUs')
+                    isNavOpen: false,    // Controls mobile navigation menu visibility
+                    isLargeScreen: window.innerWidth >= 1024, // Check initial screen size for responsiveness
+                    selectedProject: null, // Stores the project object when viewing details
+                    projects: [          // Sample project data
+                        {
+                            id: 1,
+                            title: 'The Enchanted Forest Board Game',
+                            description: 'A magical cooperative board game for 1-4 players, where you explore a mystical forest, gather resources, and defeat ancient spirits to restore balance.',
+                            imageUrl: 'https://placehold.co/600x400/8A2BE2/FFFFFF?text=Board+Game',
+                            raised: 85000,
+                            goal: 100000,
+                            backers: 1250,
+                            daysLeft: 20,
+                            category: 'Games',
+                            location: 'New York, USA',
+                            creator: 'Fantasy Games Studio',
+                            endDate: 'July 25, 2025'
+                        },
+                        {
+                            id: 2,
+                            title: 'Eco-Friendly Smart Garden System',
+                            description: 'Grow fresh herbs and vegetables indoors with our automated, water-saving smart garden. Perfect for urban living and sustainable gardening.',
+                            imageUrl: 'https://placehold.co/600x400/228B22/FFFFFF?text=Smart+Garden',
+                            raised: 120000,
+                            goal: 75000, // Exceeded goal
+                            backers: 1800,
+                            daysLeft: 5,
+                            category: 'Technology',
+                            location: 'Berlin, Germany',
+                            creator: 'GreenTech Innovations',
+                            endDate: 'July 10, 2025'
+                        },
+                        {
+                            id: 3,
+                            title: 'Handcrafted Leather Wallets',
+                            description: 'Premium, minimalist leather wallets designed for durability and style. Each piece is handcrafted with full-grain leather and meticulous attention to detail.',
+                            imageUrl: 'https://placehold.co/600x400/8B4513/FFFFFF?text=Leather+Wallet',
+                            raised: 30000,
+                            goal: 40000,
+                            backers: 500,
+                            daysLeft: 35,
+                            category: 'Design',
+                            location: 'London, UK',
+                            creator: 'Artisan Leatherworks',
+                            endDate: 'August 9, 2025'
+                        },
+                        {
+                            id: 4,
+                            title: 'Sci-Fi Short Film: Echoes of Kepler',
+                            description: 'A visually stunning short film exploring humanity\'s first encounter with alien life on a distant exoplanet. Featuring groundbreaking VFX and a compelling story.',
+                            imageUrl: 'https://placehold.co/600x400/4682B4/FFFFFF?text=Sci-Fi+Film',
+                            raised: 70000,
+                            goal: 90000,
+                            backers: 900,
+                            daysLeft: 15,
+                            category: 'Film & Video',
+                            location: 'Los Angeles, USA',
+                            creator: 'Cosmic Dreams Productions',
+                            endDate: 'July 20, 2025'
+                        },
+                        {
+                            id: 5,
+                            title: 'The Ultimate Travel Backpack',
+                            description: 'Designed for adventurers, this backpack combines durability, comfort, and innovative features for your next journey. With modular compartments and anti-theft design.',
+                            imageUrl: 'https://placehold.co/600x400/4B0082/FFFFFF?text=Travel+Backpack',
+                            raised: 150000,
+                            goal: 120000, // Exceeded goal
+                            backers: 2500,
+                            daysLeft: 10,
+                            category: 'Product Design',
+                            location: 'Vancouver, Canada',
+                            creator: 'Nomad Gear Co.',
+                            endDate: 'July 15, 2025'
+                        },
+                        {
+                            id: 6,
+                            title: 'Acoustic Guitar Masterclass Series',
+                            description: 'Learn to play acoustic guitar from scratch to advanced techniques with this comprehensive video series, taught by award-winning musicians.',
+                            imageUrl: 'https://placehold.co/600x400/D2B48C/FFFFFF?text=Acoustic+Guitar',
+                            raised: 25000,
+                            goal: 30000,
+                            backers: 450,
+                            daysLeft: 28,
+                            category: 'Music',
+                            location: 'Nashville, USA',
+                            creator: 'Melody Makers',
+                            endDate: 'August 2, 2025'
+                        }
+                    ]
+                };
+            },
+            methods: {
+                // Toggles the mobile navigation menu
+                toggleNav() {
+                    this.isNavOpen = !this.isNavOpen;
+                },
+                // Sets the current page to display project details
+                viewProject(project) {
+                    this.selectedProject = project;
+                    this.currentPage = 'projectDetail';
+                    this.isNavOpen = false; // Close nav when navigating to a project detail
+                }
+            },
+            mounted() {
+                // Update isLargeScreen on resize and close nav if needed
+                window.addEventListener('resize', () => {
+                    this.isLargeScreen = window.innerWidth >= 1024; // Tailwind's 'lg' breakpoint
+                    if (this.isLargeScreen) {
+                        this.isNavOpen = false; // Close mobile nav when switching to desktop view
+                    }
+                });
+            }
+        });
+
+        app.mount('#app'); // Mount the Vue application to the #app div
+    </script>
+</body>
+</html>
