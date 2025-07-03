@@ -565,8 +565,6 @@
                         creator: ''
                     };
 
-                    // Navigate back to discover page or show a success message
-                    alert('Your project has been submitted successfully for review! (This is a demo, data is not saved)');
                     this.currentPage = 'discover'; // Go back to discover page
                 },
                 // Starts the automatic scrolling of the project showcase
@@ -591,17 +589,7 @@
 
                     this.scrollInterval = setInterval(() => {
                         showcase.scrollLeft += this.scrollSpeed * this.scrollDirection;
-
-                        // If we've scrolled past the first full set of original content,
-                        // jump back to the beginning of the second set for seamless looping.
-                        // The total scrollable width is 3x the original content width.
-                        // We reset when we pass the width of one original set.
-                    if (showcase.scrollLeft >= 2 * originalContentWidth) {
-                        // Jump back to the start of the second set to make the loop seamless
-                        // using the second set as the primary repeating block.
-                        showcase.scrollLeft = originalContentWidth;
-                        }
-                    }, 20); // Adjust interval for desired speed (lower value = faster, smoother)
+                    }, 10);
                 },
                 // Pauses the automatic scrolling
                 pauseScroll() {
@@ -612,17 +600,7 @@
                 }
             },
             watch: {
-                // Watch for changes in currentPage to start/stop scrolling
-                currentPage(newPage) {
-                    if (newPage === 'home') {
-                        // Give a slight delay to ensure the DOM is rendered before starting scroll
-                        this.$nextTick(() => {
-                            this.startScroll();
-                        });
-                    } else {
-                        this.pauseScroll();
-                    }
-                }
+                // Watch for changes in currentPage to start/stop scrollings
             },
             mounted() {
                 // Update isLargeScreen on resize and close nav if needed
