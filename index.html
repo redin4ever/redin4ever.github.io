@@ -128,9 +128,9 @@
                         </button>
                     </div>
                     <div id="projectShowcase" class="project-showcase-scroll flex overflow-x-auto pb-4 px-4 space-x-6"
-                         @mouseenter="pauseScroll" @mouseleave="startScroll">
-                        <!-- Render projects three times for seamless infinite scroll -->
-                        <div v-for="(project, index) in projects.concat(projects, projects)" :key="project.id + '-' + index" @click="viewProject(project)"
+                         @scroll.passive="handleProjectScroll">
+                        <!-- Render projects dynamically -->
+                        <div v-for="(project, index) in displayedProjects" :key="project.id + '-' + index" @click="viewProject(project)"
                              class="flex-none w-72 bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer transform hover:scale-105 transition-all duration-300 border border-gray-200 hover:border-purple-500">
                             <img :src="project.imageUrl" :alt="project.title" class="w-full h-40 object-cover">
                             <div class="p-4">
@@ -407,9 +407,8 @@
                 return {
                     currentPage: 'home', // Controls which section is visible
                     isNavOpen: false,    // Controls mobile navigation menu visibility
-                    isLargeScreen: window.innerWidth >= 1024, // Check initial screen size for responsiveness
-                    selectedProject: null, // Stores the project object when viewing details
-                    // Data for the new project submission form
+                    isLargeScreen: window.innerWidth >= 1024,
+                    selectedProject: null,
                     newProject: {
                         title: '',
                         description: '',
@@ -418,7 +417,8 @@
                         category: '',
                         creator: ''
                     },
-                    projects: [          // Sample project data
+                    displayedProjects: [], // Used for the infinitely scrolling featured projects
+                    projects: [ // Sample project data - this is the master list
                         {
                             id: 1,
                             title: 'AI-Powered Study Assistant',
@@ -439,7 +439,7 @@
                             description: 'A student-led project to establish and maintain an organic garden on campus, promoting sustainable living and providing fresh produce to the university community.',
                             imageUrl: 'https://placehold.co/600x400/228B22/FFFFFF?text=Campus+Garden',
                             raised: 120000,
-                            goal: 75000, // Exceeded goal
+                            goal: 75000,
                             backers: 1800,
                             daysLeft: 5,
                             category: 'Environmental',
@@ -481,7 +481,7 @@
                             description: 'A mobile application providing students with resources, mindfulness exercises, and access to support services to promote mental well-being on campus.',
                             imageUrl: 'https://placehold.co/600x400/4B0082/FFFFFF?text=Wellness+App',
                             raised: 150000,
-                            goal: 120000, // Exceeded goal
+                            goal: 120000,
                             backers: 2500,
                             daysLeft: 10,
                             category: 'Health',
