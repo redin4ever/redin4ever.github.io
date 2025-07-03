@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kickstarter Clone</title>
+    <title>Student Project Hub</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Vue.js CDN -->
@@ -63,7 +63,7 @@
             <div class="container mx-auto flex flex-wrap items-center justify-between">
                 <!-- Logo/Brand -->
                 <a href="#" @click.prevent="currentPage = 'home'" class="text-white text-3xl font-bold rounded-lg px-3 py-1 hover:bg-white hover:text-purple-700 transition-all duration-300">
-                    Kickstarter <span class="text-xl font-normal">Clone</span>
+                    Student <span class="text-xl font-normal">Project Hub</span>
                 </a>
 
                 <!-- Mobile Menu Button -->
@@ -78,8 +78,8 @@
                 <div :class="{'nav-links-container': true, 'open': isNavOpen}"
                      class="w-full lg:flex lg:items-center lg:w-auto mt-4 lg:mt-0 flex-col lg:flex-row space-y-3 lg:space-y-0 lg:space-x-8">
                     <a href="#" @click.prevent="currentPage = 'home'; isNavOpen = false;" class="text-white hover:text-purple-200 text-lg font-medium py-2 px-3 rounded-md transition-colors duration-200">Home</a>
-                    <a href="#" @click.prevent="currentPage = 'discover'; isNavOpen = false;" class="text-white hover:text-purple-200 text-lg font-medium py-2 px-3 rounded-md transition-colors duration-200">Discover</a>
-                    <a href="#" @click.prevent="currentPage = 'startProject'; isNavOpen = false;" class="text-white hover:text-purple-200 text-lg font-medium py-2 px-3 rounded-md transition-colors duration-200">Start a Project</a>
+                    <a href="#" @click.prevent="currentPage = 'discover'; isNavOpen = false;" class="text-white hover:text-purple-200 text-lg font-medium py-2 px-3 rounded-md transition-colors duration-200">Discover Projects</a>
+                    <a href="#" @click.prevent="currentPage = 'startProject'; isNavOpen = false;" class="text-white hover:text-purple-200 text-lg font-medium py-2 px-3 rounded-md transition-colors duration-200">Submit Your Project</a>
                     <a href="#" @click.prevent="currentPage = 'aboutUs'; isNavOpen = false;" class="text-white hover:text-purple-200 text-lg font-medium py-2 px-3 rounded-md transition-colors duration-200">About Us</a>
                 </div>
             </div>
@@ -89,24 +89,24 @@
         <main class="flex-grow container mx-auto p-6">
             <!-- Home Page -->
             <section v-if="currentPage === 'home'" class="text-center py-16 bg-white rounded-xl shadow-md">
-                <h1 class="text-5xl font-extrabold text-gray-800 mb-6 leading-tight">Bring Your Ideas to Life</h1>
+                <h1 class="text-5xl font-extrabold text-gray-800 mb-6 leading-tight">Showcase Your Student Innovations</h1>
                 <p class="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
-                    Kickstarter is a global community that helps bring creative projects to life.
-                    Explore millions of projects, or start your own.
+                    This hub is dedicated to empowering students to share, discover, and support innovative projects.
+                    Bring your academic and creative ideas to life!
                 </p>
                 <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
                     <button @click="currentPage = 'discover'" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 text-lg">
-                        Discover Projects
+                        Explore Student Projects
                     </button>
-                    <button @click="currentPage = 'startProject'" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 text-lg">
-                        Start Your Project
+                    <button @click="currentPage = 'createProjectForm'" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 text-lg">
+                        Submit Your Project
                     </button>
                 </div>
             </section>
 
             <!-- Discover Projects Page -->
             <section v-if="currentPage === 'discover'" class="py-8">
-                <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Explore Amazing Projects</h2>
+                <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Explore Amazing Student Projects</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <!-- Project Card Loop -->
                     <div v-for="project in projects" :key="project.id" @click="viewProject(project)"
@@ -120,7 +120,8 @@
                                 <div class="text-sm text-gray-500">of ${{ project.goal.toLocaleString() }} goal</div>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                <div class="bg-purple-600 h-2.5 rounded-full" :style="{ width: (project.raised / project.goal * 100) + '%' }"></div>
+                                <!-- Fixed: Progress bar width capped at 100% -->
+                                <div class="bg-purple-600 h-2.5 rounded-full" :style="{ width: Math.min(100, (project.raised / project.goal * 100)) + '%' }"></div>
                             </div>
                             <p class="text-sm text-gray-500 mt-2">{{ Math.ceil((project.raised / project.goal) * 100) }}% funded</p>
                             <p class="text-sm text-gray-500 mt-2">{{ project.backers }} backers</p>
@@ -149,7 +150,8 @@
                         <div class="text-3xl font-extrabold text-purple-700 mb-3">${{ selectedProject.raised.toLocaleString() }}</div>
                         <div class="text-lg text-gray-600 mb-4">pledged of ${{ selectedProject.goal.toLocaleString() }} goal</div>
                         <div class="w-full bg-gray-200 rounded-full h-3.5 mb-2">
-                            <div class="bg-purple-600 h-3.5 rounded-full" :style="{ width: (selectedProject.raised / selectedProject.goal * 100) + '%' }"></div>
+                            <!-- Fixed: Progress bar width capped at 100% -->
+                            <div class="bg-purple-600 h-3.5 rounded-full" :style="{ width: Math.min(100, (selectedProject.raised / selectedProject.goal * 100)) + '%' }"></div>
                         </div>
                         <p class="text-sm text-gray-500 mb-4">{{ Math.ceil((selectedProject.raised / selectedProject.goal) * 100) }}% funded</p>
 
@@ -167,56 +169,115 @@
                 </div>
             </section>
 
-            <!-- Start a Project Page -->
+            <!-- Start a Project Page (Now leads to form) -->
             <section v-if="currentPage === 'startProject'" class="py-16 bg-white rounded-xl shadow-md p-8 text-center">
-                <h2 class="text-4xl font-bold text-gray-800 mb-6">Ready to Start Your Project?</h2>
+                <h2 class="text-4xl font-bold text-gray-800 mb-6">Ready to Submit Your Project?</h2>
                 <p class="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
-                    Bring your creative project to life with the support of our global community.
-                    Whether it's art, design, film, music, or technology, we're here to help you get funded.
+                    Share your innovative academic or creative project with the student community.
+                    Get feedback, collaborate, and showcase your hard work!
                 </p>
                 <div class="flex flex-col items-center space-y-6">
                     <div class="bg-purple-100 p-6 rounded-lg shadow-inner w-full max-w-md">
                         <h3 class="text-2xl font-semibold text-purple-800 mb-4">How it Works:</h3>
                         <ul class="text-left text-gray-700 space-y-3">
                             <li class="flex items-start">
+                                <span class="text-purple-600 text-xl mr-3">💡</span>
+                                <span><strong>Prepare your project:</strong> Outline your idea, goals, and what you need.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-purple-600 text-xl mr-3">📝</span>
+                                <span><strong>Fill out the form:</strong> Provide details and an image for your project.</span>
+                            </li>
+                            <li class="flex items-start">
                                 <span class="text-purple-600 text-xl mr-3">🚀</span>
-                                <span><strong>Create your project:</strong> Tell your story, set a funding goal, and offer rewards.</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="text-purple-600 text-xl mr-3">🤝</span>
-                                <span><strong>Build your community:</strong> Share your project with friends, family, and the world.</span>
-                            </li>
-                            <li class="flex items-start">
-                                <span class="text-purple-600 text-xl mr-3">💰</span>
-                                <span><strong>Get funded:</strong> If you reach your goal, you keep the funds to make your dream a reality!</span>
+                                <span><strong>Showcase & Share:</strong> Your project will be listed for others to see and support!</span>
                             </li>
                         </ul>
                     </div>
-                    <button class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 text-lg">
-                        Get Started Now
+                    <button @click="currentPage = 'createProjectForm'" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 text-lg">
+                        Start Your Submission
                     </button>
                 </div>
             </section>
 
+            <!-- Create Project Form Page -->
+            <section v-if="currentPage === 'createProjectForm'" class="py-8 bg-white rounded-xl shadow-md p-8">
+                <button @click="currentPage = 'startProject'" class="mb-6 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full transition-colors duration-200 flex items-center">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Back to Submission Info
+                </button>
+                <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Submit Your New Project</h2>
+                <form @submit.prevent="submitNewProject" class="max-w-2xl mx-auto space-y-6">
+                    <div>
+                        <label for="projectTitle" class="block text-gray-700 text-lg font-medium mb-2">Project Title</label>
+                        <input type="text" id="projectTitle" v-model="newProject.title"
+                               class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                               placeholder="e.g., AI-Powered Study Assistant" required>
+                    </div>
+                    <div>
+                        <label for="projectDescription" class="block text-gray-700 text-lg font-medium mb-2">Project Description</label>
+                        <textarea id="projectDescription" v-model="newProject.description" rows="5"
+                                  class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                  placeholder="Describe your project, its purpose, and what you hope to achieve..." required></textarea>
+                    </div>
+                    <div>
+                        <label for="projectGoal" class="block text-gray-700 text-lg font-medium mb-2">Funding Goal (Optional, for conceptual support)</label>
+                        <input type="number" id="projectGoal" v-model.number="newProject.goal"
+                               class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                               placeholder="e.g., 500 (for hypothetical support/resources)">
+                    </div>
+                    <div>
+                        <label for="projectImage" class="block text-gray-700 text-lg font-medium mb-2">Image URL</label>
+                        <input type="url" id="projectImage" v-model="newProject.imageUrl"
+                               class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                               placeholder="e.g., https://placehold.co/600x400/0000FF/FFFFFF?text=My+Project" required>
+                    </div>
+                    <div>
+                        <label for="projectCategory" class="block text-gray-700 text-lg font-medium mb-2">Category</label>
+                        <select id="projectCategory" v-model="newProject.category"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                required>
+                            <option value="">Select a category</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Design">Design</option>
+                            <option value="Arts">Arts</option>
+                            <option value="Science">Science</option>
+                            <option value="Research">Research</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="projectCreator" class="block text-gray-700 text-lg font-medium mb-2">Your Name / Team Name</label>
+                        <input type="text" id="projectCreator" v-model="newProject.creator"
+                               class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                               placeholder="e.g., Team Innovators" required>
+                    </div>
+                    <button type="submit"
+                            class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 text-lg">
+                        Submit Project
+                    </button>
+                </form>
+            </section>
+
             <!-- About Us Page -->
             <section v-if="currentPage === 'aboutUs'" class="py-16 bg-white rounded-xl shadow-md p-8 text-center">
-                <h2 class="text-4xl font-bold text-gray-800 mb-6">About Our Kickstarter Clone</h2>
+                <h2 class="text-4xl font-bold text-gray-800 mb-6">About the Student Project Hub</h2>
                 <p class="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
-                    This is a simplified, front-end only demonstration of a Kickstarter-like platform, built with Vue.js and Tailwind CSS.
-                    It showcases basic project listing, detail viewing, and navigation.
+                    This platform is a conceptual demonstration of a community hub for student projects, built with Vue.js and Tailwind CSS.
+                    It aims to inspire, showcase, and connect students working on innovative ideas.
                 </p>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
                     <div class="bg-gray-50 p-6 rounded-lg shadow-inner">
-                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">Our Mission</h3>
+                        <h3 class="text-2xl font-semibold text-gray-800 mb-3">Our Vision</h3>
                         <p class="text-gray-700">
-                            To empower creators to bring their innovative ideas to life by connecting them with a passionate community of backers.
-                            We believe in the power of collective support to foster creativity and innovation.
+                            To foster a vibrant ecosystem where student creativity and academic excellence can flourish.
+                            We envision a space where ideas are shared, collaborations are formed, and projects gain visibility.
                         </p>
                     </div>
                     <div class="bg-gray-50 p-6 rounded-lg shadow-inner">
                         <h3 class="text-2xl font-semibold text-gray-800 mb-3">Technologies Used</h3>
                         <ul class="list-disc list-inside text-gray-700 space-y-2">
-                            <li><strong>Vue.js 3:</strong> For reactive components and state management.</li>
+                            <li><strong>Vue.js 3:</strong> For reactive components and dynamic content.</li>
                             <li><strong>HTML5:</strong> For the semantic structure of the web page.</li>
                             <li><strong>Tailwind CSS:</strong> For utility-first, responsive styling.</li>
                             <li><strong>JavaScript:</strong> For core logic and interactivity.</li>
@@ -224,16 +285,71 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Privacy Policy Page -->
+            <section v-if="currentPage === 'privacyPolicy'" class="py-8 bg-white rounded-xl shadow-md p-8">
+                <button @click="currentPage = 'home'" class="mb-6 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full transition-colors duration-200 flex items-center">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Back to Home
+                </button>
+                <h2 class="text-4xl font-bold text-gray-800 mb-6 text-center">Privacy Policy</h2>
+                <div class="prose max-w-none text-gray-700">
+                    <p>This Student Project Hub is a demonstration platform and does not collect, store, or process any personal user data. All project data displayed is sample data and is not persistent.</p>
+                    <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">Information We Don't Collect</h3>
+                    <p>We do not collect any personally identifiable information (PII) such as names, email addresses, IP addresses, or any other data that could be used to identify you.</p>
+                    <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">Cookies and Tracking</h3>
+                    <p>This website does not use cookies or any other tracking technologies. Your browsing experience is entirely private.</p>
+                    <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">Third-Party Services</h3>
+                    <p>We do not integrate with any third-party services that would collect your data. All content is served directly from this single HTML file.</p>
+                    <p class="mt-8 text-sm text-gray-500">Last updated: July 3, 2025</p>
+                </div>
+            </section>
+
+            <!-- Terms of Service Page -->
+            <section v-if="currentPage === 'termsOfService'" class="py-8 bg-white rounded-xl shadow-md p-8">
+                <button @click="currentPage = 'home'" class="mb-6 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full transition-colors duration-200 flex items-center">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Back to Home
+                </button>
+                <h2 class="text-4xl font-bold text-gray-800 mb-6 text-center">Terms of Service</h2>
+                <div class="prose max-w-none text-gray-700">
+                    <p>Welcome to the Student Project Hub! These Terms of Service outline the rules and regulations for the use of our demonstration website.</p>
+                    <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">Acceptance of Terms</h3>
+                    <p>By accessing this website, you agree to be bound by these Terms of Service. If you disagree with any part of the terms, you may not access the website.</p>
+                    <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">Nature of the Service</h3>
+                    <p>This website is a conceptual prototype for showcasing student projects. It is not a live production system and does not offer real-world funding, collaboration, or data persistence. All interactions are for demonstration purposes only.</p>
+                    <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">User Conduct</h3>
+                    <p>You agree to use this website only for lawful purposes and in a way that does not infringe the rights of, restrict, or inhibit anyone else's use and enjoyment of the website.</p>
+                    <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">Content</h3>
+                    <p>Any project data submitted through the form is for demonstration purposes only and will not be stored or publicly displayed beyond the current session. Do not submit any sensitive or real personal information.</p>
+                    <p class="mt-8 text-sm text-gray-500">Last updated: July 3, 2025</p>
+                </div>
+            </section>
+
+            <!-- Contact Us Page -->
+            <section v-if="currentPage === 'contactUs'" class="py-8 bg-white rounded-xl shadow-md p-8">
+                <button @click="currentPage = 'home'" class="mb-6 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full transition-colors duration-200 flex items-center">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Back to Home
+                </button>
+                <h2 class="text-4xl font-bold text-gray-800 mb-6 text-center">Contact Us</h2>
+                <div class="prose max-w-none text-gray-700 text-center">
+                    <p>Since this is a demonstration website, we do not have a live contact form or direct support channels.</p>
+                    <h3 class="text-2xl font-semibold text-gray-800 mt-6 mb-3">For Demonstration Inquiries:</h3>
+                    <p>If you have questions about this specific Vue.js and Tailwind CSS implementation, please refer to the source code on GitHub (if available).</p>
+                    <p class="mt-4">Thank you for exploring our Student Project Hub concept!</p>
+                </div>
+            </section>
         </main>
 
         <!-- Footer -->
         <footer class="bg-gray-800 text-white p-6 text-center mt-auto rounded-t-xl shadow-inner">
             <div class="container mx-auto">
-                <p>&copy; 2025 Kickstarter Clone. All rights reserved. Built with Vue.js & Tailwind CSS.</p>
+                <p>&copy; 2025 Student Project Hub. All rights reserved. Built with Vue.js & Tailwind CSS.</p>
                 <div class="flex justify-center space-x-6 mt-4">
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Privacy Policy</a>
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Terms of Service</a>
-                    <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Contact Us</a>
+                    <a href="#" @click.prevent="currentPage = 'privacyPolicy'" class="text-gray-400 hover:text-white transition-colors duration-200">Privacy Policy</a>
+                    <a href="#" @click.prevent="currentPage = 'termsOfService'" class="text-gray-400 hover:text-white transition-colors duration-200">Terms of Service</a>
+                    <a href="#" @click.prevent="currentPage = 'contactUs'" class="text-gray-400 hover:text-white transition-colors duration-200">Contact Us</a>
                 </div>
             </div>
         </footer>
@@ -243,79 +359,88 @@
         const app = Vue.createApp({
             data() {
                 return {
-                    currentPage: 'home', // Controls which section is visible ('home', 'discover', 'projectDetail', 'startProject', 'aboutUs')
+                    currentPage: 'home', // Controls which section is visible
                     isNavOpen: false,    // Controls mobile navigation menu visibility
                     isLargeScreen: window.innerWidth >= 1024, // Check initial screen size for responsiveness
                     selectedProject: null, // Stores the project object when viewing details
+                    // Data for the new project submission form
+                    newProject: {
+                        title: '',
+                        description: '',
+                        goal: null,
+                        imageUrl: '',
+                        category: '',
+                        creator: ''
+                    },
                     projects: [          // Sample project data
                         {
                             id: 1,
-                            title: 'The Enchanted Forest Board Game',
-                            description: 'A magical cooperative board game for 1-4 players, where you explore a mystical forest, gather resources, and defeat ancient spirits to restore balance.',
-                            imageUrl: 'https://placehold.co/600x400/8A2BE2/FFFFFF?text=Board+Game',
+                            title: 'AI-Powered Study Assistant',
+                            description: 'An intelligent application designed to help students organize notes, summarize lectures, and generate practice questions using advanced AI models.',
+                            imageUrl: 'https://placehold.co/600x400/8A2BE2/FFFFFF?text=AI+Assistant',
                             raised: 85000,
                             goal: 100000,
                             backers: 1250,
                             daysLeft: 20,
-                            category: 'Games',
-                            location: 'New York, USA',
-                            creator: 'Fantasy Games Studio',
+                            category: 'Technology',
+                            location: 'University City, USA',
+                            creator: 'InnovateTech Students',
                             endDate: 'July 25, 2025'
                         },
                         {
                             id: 2,
-                            title: 'Eco-Friendly Smart Garden System',
-                            description: 'Grow fresh herbs and vegetables indoors with our automated, water-saving smart garden. Perfect for urban living and sustainable gardening.',
-                            imageUrl: 'https://placehold.co/600x400/228B22/FFFFFF?text=Smart+Garden',
+                            title: 'Sustainable Campus Garden Initiative',
+                            description: 'A student-led project to establish and maintain an organic garden on campus, promoting sustainable living and providing fresh produce to the university community.',
+                            imageUrl: 'https://placehold.co/600x400/228B22/FFFFFF?text=Campus+Garden',
                             raised: 120000,
                             goal: 75000, // Exceeded goal
                             backers: 1800,
                             daysLeft: 5,
-                            category: 'Technology',
-                            location: 'Berlin, Germany',
-                            creator: 'GreenTech Innovations',
+                            category: 'Environmental',
+                            location: 'Greenfield University',
+                            creator: 'Eco-Warriors Club',
                             endDate: 'July 10, 2025'
                         },
                         {
                             id: 3,
-                            title: 'Handcrafted Leather Wallets',
-                            description: 'Premium, minimalist leather wallets designed for durability and style. Each piece is handcrafted with full-grain leather and meticulous attention to detail.',
-                            imageUrl: 'https://placehold.co/600x400/8B4513/FFFFFF?text=Leather+Wallet',
+                            title: 'Student Art Exhibition: "Perspectives"',
+                            description: 'An annual exhibition showcasing diverse artworks from students across various disciplines, fostering creativity and providing a platform for emerging artists.',
+                            imageUrl: 'https://placehold.co/600x400/8B4513/FFFFFF?text=Student+Art',
                             raised: 30000,
                             goal: 40000,
                             backers: 500,
                             daysLeft: 35,
-                            category: 'Design',
-                            location: 'London, UK',
-                            creator: 'Artisan Leatherworks',
+                            category: 'Arts',
+                            location: 'Campus Gallery',
+                            creator: 'Fine Arts Society',
                             endDate: 'August 9, 2025'
                         },
                         {
                             id: 4,
-                            title: 'Sci-Fi Short Film: Echoes of Kepler',
-                            description: 'A visually stunning short film exploring humanity\'s first encounter with alien life on a distant exoplanet. Featuring groundbreaking VFX and a compelling story.',
-                            imageUrl: 'https://placehold.co/600x400/4682B4/FFFFFF?text=Sci-Fi+Film',
+                            title: 'Open-Source Robotics Kit for Beginners',
+                            description: 'A low-cost, modular robotics kit designed to introduce engineering students to robotics and programming, complete with tutorials and community support.',
+                            imageUrl: 'https://placehold.co/600x400/4682B4/FFFFFF?text=Robotics+Kit',
                             raised: 70000,
                             goal: 90000,
                             backers: 900,
                             daysLeft: 15,
-                            category: 'Film & Video',
-                            location: 'Los Angeles, USA',
-                            creator: 'Cosmic Dreams Productions',
+                            category: 'Engineering',
+                            location: 'Tech Institute',
+                            creator: 'Robotics Club',
                             endDate: 'July 20, 2025'
                         },
                         {
                             id: 5,
-                            title: 'The Ultimate Travel Backpack',
-                            description: 'Designed for adventurers, this backpack combines durability, comfort, and innovative features for your next journey. With modular compartments and anti-theft design.',
-                            imageUrl: 'https://placehold.co/600x400/4B0082/FFFFFF?text=Travel+Backpack',
+                            title: 'Campus Mental Wellness App',
+                            description: 'A mobile application providing students with resources, mindfulness exercises, and access to support services to promote mental well-being on campus.',
+                            imageUrl: 'https://placehold.co/600x400/4B0082/FFFFFF?text=Wellness+App',
                             raised: 150000,
                             goal: 120000, // Exceeded goal
                             backers: 2500,
                             daysLeft: 10,
-                            category: 'Product Design',
-                            location: 'Vancouver, Canada',
-                            creator: 'Nomad Gear Co.',
+                            category: 'Health',
+                            location: 'Campus Health Center',
+                            creator: 'Wellness Advocates',
                             endDate: 'July 15, 2025'
                         },
                         {
@@ -345,6 +470,55 @@
                     this.selectedProject = project;
                     this.currentPage = 'projectDetail';
                     this.isNavOpen = false; // Close nav when navigating to a project detail
+                },
+                // Handles submission of a new project
+                submitNewProject() {
+                    // Basic validation
+                    if (!this.newProject.title || !this.newProject.description || !this.newProject.imageUrl || !this.newProject.category || !this.newProject.creator) {
+                        alert('Please fill in all required fields (Title, Description, Image URL, Category, Your Name/Team Name).');
+                        return;
+                    }
+
+                    // Create a new project object
+                    const newId = this.projects.length > 0 ? Math.max(...this.projects.map(p => p.id)) + 1 : 1;
+                    const today = new Date();
+                    const endDate = new Date();
+                    endDate.setDate(today.getDate() + 30); // Default 30 days from now for new projects
+
+                    const submittedProject = {
+                        id: newId,
+                        title: this.newProject.title,
+                        description: this.newProject.description,
+                        imageUrl: this.newProject.imageUrl,
+                        raised: 0, // New projects start with 0 raised
+                        goal: this.newProject.goal || 1000, // Default goal if not provided
+                        backers: 0,
+                        daysLeft: 30, // Default days left
+                        category: this.newProject.category,
+                        location: 'Student Project', // Default location
+                        creator: this.newProject.creator,
+                        endDate: endDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+                    };
+
+                    // Add the new project to the list (for demonstration purposes)
+                    this.projects.unshift(submittedProject); // Add to the beginning
+
+                    // Log the submitted data to console (proof of concept for submission)
+                    console.log('New Project Submitted:', submittedProject);
+
+                    // Reset form fields
+                    this.newProject = {
+                        title: '',
+                        description: '',
+                        goal: null,
+                        imageUrl: '',
+                        category: '',
+                        creator: ''
+                    };
+
+                    // Navigate back to discover page or show a success message
+                    alert('Your project has been submitted successfully for review! (This is a demo, data is not saved)');
+                    this.currentPage = 'discover'; // Go back to discover page
                 }
             },
             mounted() {
