@@ -428,11 +428,11 @@
                     <!-- Placeholder for Top Investors & Charts -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="p-6 rounded-lg shadow-md" style="background: #f5e7ce; box-shadow: 0 2px 12px 0 rgba(191,167,122,0.10), 0 1.5px 8px 0 rgba(169,140,108,0.06);">
-                            <h3 class="text-2xl font-semibold text-gray-700 mb-4">Top Investors</h3>
+                            <h3 class="text-2xl font-semibold text-gray-700 mb-4">Top Supporters</h3>
                             <ul class="space-y-3">
                                 <li v-for="i in 5" :key="'investor-' + i" class="flex justify-between items-center p-3 rounded shadow-sm" style="background: rgb(245, 231, 206); box-shadow: rgba(191, 167, 122, 0.1) 0px 2px 12px 0px, rgba(169, 140, 108, 0.06) 0px 1.5px 8px 0px;">
-                                    <span class="text-[#855038]font-medium">Investor #{{ i }}</span>
-                                    <span class="text-[#855038] font-semibold">${{ (100000 / i).toLocaleString() }} (Demo)</span>
+                                    <span class="text-[#855038]font-medium">Supporter #{{ i }}</span>
+                                    <span class="text-[#855038] font-semibold">${{ (100000 / i).toLocaleString() }}</span>
                                 </li>
                             </ul>
                         </div>
