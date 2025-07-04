@@ -12,8 +12,9 @@
             /* Custom styles for the Inter font and general body */
             body {
                 font-family: 'Inter', sans-serif;
-                background-color: #f7f7f7; /* Light gray background */
-                color: #333; /* Darker text color */
+                /* Calm, Arab/camel-inspired gradient: soft sand, muted palm, desert dusk */
+                background: linear-gradient(135deg, #e9dbc2 0%, #d2b48c 40%, #bfa77a 80%, #a98c6c 100%);
+                color: #3a2c1a; /* Softer, less harsh text */
             }
             /* Ensure the app container takes full width */
             #app {
@@ -73,11 +74,11 @@
     <body>
         <div id="app">
             <!-- Navbar Component -->
-            <nav class="bg-gradient-to-r from-purple-600 to-indigo-700 p-4 shadow-lg">
+            <nav class="bg-gradient-to-r from-[#bfa77a] via-[#a98c6c] to-[#7d5c36] p-4 shadow-lg">
                 <div class="container mx-auto flex flex-wrap items-center justify-between">
                     <!-- Logo/Brand -->
-                    <a href="#" @click.prevent="currentPage = 'home'" class="text-white text-3xl font-bold rounded-lg px-3 py-1 hover:bg-white hover:text-purple-700 transition-all duration-300">
-                        Student <span class="text-xl font-normal">Project Hub</span>
+                    <a href="#" @click.prevent="currentPage = 'home'" class="rounded-lg  group transition-all duration-300 flex items-center">
+                        <img src="logo.png" alt="Student Project Hub Logo" class="position: absolute  h-24 w-44 transition duration-300 group-hover:invert" style="filter: drop-shadow(0 2px 8px rgba(0,0,0,0.08)); object-fit: contain;" />
                     </a>
 
                     <!-- Mobile Menu Button -->
@@ -93,15 +94,15 @@
                     <!-- Navigation Links -->
                     <div :class="{'nav-links-container': true, 'open': isNavOpen}"
                         class="w-full lg:flex lg:items-center lg:w-auto mt-4 lg:mt-0 flex-col lg:flex-row space-y-3 lg:space-y-0 lg:space-x-8 lg:max-h-none lg:overflow-visible">
-                        <a href="#" @click.prevent="currentPage = 'home'; isNavOpen = false;" class="text-white hover:text-purple-200 text-lg font-medium py-2 px-3 rounded-md transition-colors duration-200">Home</a>
-                        <a href="#" @click.prevent="currentPage = 'discover'; isNavOpen = false;" class="text-white hover:text-purple-200 text-lg font-medium py-2 px-3 rounded-md transition-colors duration-200">Discover Projects</a>
-                        <a href="#" @click.prevent="currentPage = 'startProject'; isNavOpen = false;" class="text-white hover:text-purple-200 text-lg font-medium py-2 px-3 rounded-md transition-colors duration-200">Submit Your Project</a>
-                        <a href="#" @click.prevent="currentPage = 'leaderboard'; isNavOpen = false;" class="text-white hover:text-purple-200 text-lg font-medium py-2 px-3 rounded-md transition-colors duration-200">Leaderboard</a>
-                        <a href="#" @click.prevent="currentPage = 'aboutUs'; isNavOpen = false;" class="text-white hover:text-purple-200 text-lg font-medium py-2 px-3 rounded-md transition-colors duration-200">About Us</a>
+                        <a href="#" @click.prevent="currentPage = 'home'; isNavOpen = false;" class="text-white hover:text-[#855038] text-lg font-medium py-2 px-3 rounded-md transition-colors duration-200">Home</a>
+                        <a href="#" @click.prevent="currentPage = 'discover'; isNavOpen = false;" class="text-white hover:text-[#855038] text-lg font-medium py-2 px-3 rounded-md transition-colors duration-200">Discover Projects</a>
+                        <a href="#" @click.prevent="currentPage = 'startProject'; isNavOpen = false;" class="text-white hover:text-[#855038] text-lg font-medium py-2 px-3 rounded-md transition-colors duration-200">Submit Your Project</a>
+                        <a href="#" @click.prevent="currentPage = 'leaderboard'; isNavOpen = false;" class="text-white hover:text-[#855038] text-lg font-medium py-2 px-3 rounded-md transition-colors duration-200">Leaderboard</a>
+                        <a href="#" @click.prevent="currentPage = 'aboutUs'; isNavOpen = false;" class="text-white hover:text-[#855038] text-lg font-medium py-2 px-3 rounded-md transition-colors duration-200">About Us</a>
 
                         <!-- Placeholder Profile Picture (now inside nav-links-container) -->
                         <div class="mt-3 lg:mt-0 lg:ml-auto"> <!-- lg:ml-auto pushes to the right on large screens -->
-                            <img src="https://placehold.co/40x40/FFFFFF/A0A0A0?text=User&font=Inter" alt="User Profile" class="w-10 h-10 rounded-full border-2 border-purple-200 hover:border-white transition-colors duration-200 cursor-pointer">
+                            <img src="https://placehold.co/40x40/FFFFFF/A0A0A0?text=User&font=Inter" alt="User Profile" class="w-10 h-10 rounded-full border-2 border-[#855038]hover:border-white transition-colors duration-200 cursor-pointer">
                         </div>
                     </div>
                 </div>
@@ -110,18 +111,18 @@
             <!-- Main Content Area -->
             <main class="flex-grow container mx-auto p-6">
                 <!-- Home Page -->
-                <section v-if="currentPage === 'home'" class="text-center py-16 bg-white rounded-xl shadow-md">
+                <section v-if="currentPage === 'home'" class="text-center py-16 rounded-xl shadow-xl" style="background: rgba(233,219,194,0.95); box-shadow: 0 6px 24px 0 rgba(165,117,77,0.10), 0 1.5px 8px 0 rgba(185,144,62,0.08);">
                     <h1 class="text-5xl font-extrabold text-gray-800 mb-6 leading-tight">Showcase Your Student Innovations</h1>
                     <p class="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
                         This hub is dedicated to empowering students to share, discover, and support innovative projects.
                         Bring your academic and creative ideas to life!
                     </p>
                     <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6 mb-12">
-                        <button @click="currentPage = 'discover'" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 text-lg">
-                            Explore Student Projects
+                        <button @click="currentPage = 'discover'" class="bg-gradient-to-r from-[#bfa77a] via-[#d2b48c] to-[#a98c6c] hover:from-[#a98c6c] hover:to-[#bfa77a] text-[#5c4326] font-bold py-3 px-8 rounded-full shadow-lg border-2 border-[#e9dbc2] hover:border-[#bfa77a] transform hover:scale-105 transition-all duration-300 text-lg">
+                            <span class="inline-block mr-2"></span>Explore Student Projects
                         </button>
-                        <button @click="currentPage = 'createProjectForm'" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 text-lg">
-                            Submit Your Project
+                        <button @click="currentPage = 'createProjectForm'" class="bg-gradient-to-r from-[#a98c6c] via-[#e9dbc2] to-[#bfa77a] hover:from-[#bfa77a] hover:to-[#a98c6c] text-[#5c4326] font-bold py-3 px-8 rounded-full shadow-lg border-2 border-[#d2b48c] hover:border-[#a98c6c] transform hover:scale-105 transition-all duration-300 text-lg">
+                            <span class="inline-block mr-2"></span>Submit Your Project
                         </button>
                     </div>
 
@@ -129,7 +130,7 @@
                     <div class="mt-12 text-left">
                         <div class="flex justify-between items-center mb-6 px-4">
                             <h2 class="text-3xl font-bold text-gray-800">Featured Projects</h2>
-                            <button @click="currentPage = 'discover'" class="text-purple-600 hover:text-purple-800 font-semibold transition-colors duration-200 text-lg">
+                            <button @click="currentPage = 'discover'" class="text-[#bfa77a] hover:text-[#a98c6c] font-semibold transition-colors duration-200 text-lg">
                                 Show All Projects &rarr;
                             </button>
                         </div>
@@ -137,16 +138,16 @@
                             <!-- Render projects dynamically, tripled for seamless infinite scroll -->
                             <!-- Using featuredProjectsWithCalculatedDaysLeft for dynamic daysLeft -->
                             <div v-for="(project, index) in featuredProjectsWithCalculatedDaysLeft.concat(featuredProjectsWithCalculatedDaysLeft, featuredProjectsWithCalculatedDaysLeft)" :key="project.id + '-' + index" @click="viewProject(project)"
-                                class="flex-none w-72 bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer transform hover:scale-105 transition-all duration-300 border border-gray-200 hover:border-purple-500">
+                                class="flex-none w-72 rounded-xl overflow-hidden cursor-pointer transform hover:scale-105 transition-all duration-300 border border-[#e2d3b1] hover:border-[#bfa77a] shadow-md" style="background: #f5e7ce; box-shadow: 0 2px 12px 0 rgba(191,167,122,0.10), 0 1.5px 8px 0 rgba(169,140,108,0.06);">
                                 <div class="p-4">
                                     <h3 class="text-xl font-semibold text-gray-900 mb-2 truncate">{{ project.title }}</h3>
                                     <p class="text-gray-600 text-sm mb-3 line-clamp-2">{{ project.description }}</p>
                                     <div class="flex items-center justify-between mb-3">
-                                        <div class="text-md font-bold text-purple-600">${{ project.raised.toLocaleString() }}</div>
+                                        <div class="text-md font-bold text-[#855038]">${{ project.raised.toLocaleString() }}</div>
                                         <div class="text-xs text-gray-500">of ${{ project.goal.toLocaleString() }} goal</div>
                                     </div>
                                     <div class="w-full bg-gray-200 rounded-full h-2">
-                                        <div class="bg-purple-600 h-2 rounded-full" :style="{ width: Math.min(100, (project.raised / project.goal * 100)) + '%' }"></div>
+                                        <div class="bg-[#855038] h-2 rounded-full" :style="{ width: Math.min(100, (project.raised / project.goal * 100)) + '%' }"></div>
                                     </div>
                                     <p class="text-xs text-gray-500 mt-1">{{ Math.ceil((project.raised / project.goal) * 100) }}% funded</p>
                                 </div>
@@ -156,22 +157,22 @@
                 </section>
 
                 <!-- Discover Projects Page -->
-                <section v-if="currentPage === 'discover'" class="py-8">
+                <section v-if="currentPage === 'discover'" class="py-8 rounded-xl shadow-xl" style="background: rgba(233,219,194,0.95);">
                     <h2 class="text-4xl font-bold text-gray-800 mb-8 text-center">Explore Amazing Student Projects</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         <!-- Project Card Loop -->
                         <div v-for="project in projectsWithCalculatedDaysLeft" :key="project.id" @click="viewProject(project)"
-                            class="bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer transform hover:scale-105 transition-all duration-300 border border-gray-200 hover:border-purple-500">
+                            class="rounded-xl overflow-hidden cursor-pointer transform hover:scale-105 transition-all duration-300 border border-[#e2d3b1] hover:border-[#bfa77a] shadow-md" style="background: #f5e7ce; box-shadow: 0 2px 12px 0 rgba(191,167,122,0.10), 0 1.5px 8px 0 rgba(169,140,108,0.06);">
                             <div class="p-6">
                                 <h3 class="text-2xl font-semibold text-gray-900 mb-3">{{ project.title }}</h3>
                                 <p class="text-gray-600 text-sm mb-4 line-clamp-3">{{ project.description }}</p>
                                 <div class="flex items-center justify-between mb-4">
-                                    <div class="text-lg font-bold text-purple-600">${{ project.raised.toLocaleString() }}</div>
+                                    <div class="text-lg font-bold text-[#855038]">${{ project.raised.toLocaleString() }}</div>
                                     <div class="text-sm text-gray-500">of ${{ project.goal.toLocaleString() }} goal</div>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2.5">
                                     <!-- Fixed: Progress bar width capped at 100% -->
-                                    <div class="bg-purple-600 h-2.5 rounded-full" :style="{ width: Math.min(100, (project.raised / project.goal * 100)) + '%' }"></div>
+                                    <div class="bg-[#855038] h-2.5 rounded-full" :style="{ width: Math.min(100, (project.raised / project.goal * 100)) + '%' }"></div>
                                 </div>
                                 <p class="text-sm text-gray-500 mt-2">{{ Math.ceil((project.raised / project.goal) * 100) }}% funded</p>
                                 <p class="text-sm text-gray-500 mt-2">{{ project.backers }} backers</p>
@@ -182,8 +183,8 @@
                 </section>
 
                 <!-- Project Detail Page -->
-                <section v-if="currentPage === 'projectDetail' && selectedProject" class="py-8 bg-white rounded-xl shadow-md p-8">
-                    <button @click="currentPage = 'discover'" class="mb-6 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full transition-colors duration-200 flex items-center">
+                <section v-if="currentPage === 'projectDetail' && selectedProject" class="py-8 rounded-xl shadow-xl p-8" style="background: #f5eddc;">
+                    <button @click="currentPage = 'discover'" class="mb-6 bg-gradient-to-r from-[#e9dbc2] to-[#bfa77a] hover:from-[#bfa77a] hover:to-[#a98c6c] text-[#5c4326] font-bold py-2 px-4 rounded-full border-2 border-[#d2b48c] hover:border-[#a98c6c] transition-colors duration-200 flex items-center">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                         Back to Projects
                     </button>
@@ -196,12 +197,12 @@
                             <p class="text-gray-600 text-base mb-2"><strong>Location:</strong> {{ selectedProject.location }}</p>
                             <p class="text-gray-600 text-base mb-2"><strong>Creator:</strong> {{ selectedProject.creator }}</p>
                         </div>
-                        <div class="bg-gray-50 p-6 rounded-lg shadow-inner">
-                            <div class="text-3xl font-extrabold text-purple-700 mb-3">${{ selectedProject.raised.toLocaleString() }}</div>
+                        <div class="p-6 rounded-lg shadow-md" style="background: #f3e6c4; box-shadow: 0 2px 12px 0 rgba(185,144,62,0.10), 0 1.5px 8px 0 rgba(165,117,77,0.06);">
+                            <div class="text-3xl font-extrabold text-[#855038] mb-3">${{ selectedProject.raised.toLocaleString() }}</div>
                             <div class="text-lg text-gray-600 mb-4">pledged of ${{ selectedProject.goal.toLocaleString() }} goal</div>
                             <div class="w-full bg-gray-200 rounded-full h-3.5 mb-2">
                                 <!-- Fixed: Progress bar width capped at 100% -->
-                                <div class="bg-purple-600 h-3.5 rounded-full" :style="{ width: Math.min(100, (selectedProject.raised / selectedProject.goal * 100)) + '%' }"></div>
+                                <div class="bg-[#855038] h-3.5 rounded-full" :style="{ width: Math.min(100, (selectedProject.raised / selectedProject.goal * 100)) + '%' }"></div>
                             </div>
                             <p class="text-sm text-gray-500 mb-4">{{ Math.ceil((selectedProject.raised / selectedProject.goal) * 100) }}% funded</p>
 
@@ -211,12 +212,12 @@
                             <div class="text-3xl font-extrabold text-gray-800 mb-3">{{ selectedProject.daysLeft }}</div>
                             <div class="text-lg text-gray-600 mb-6">days to go</div>
 
-                            <button class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300 text-xl">
-                                Back this project
+                            <button class="w-full bg-gradient-to-r from-[#bfa77a] via-[#e9dbc2] to-[#a98c6c] hover:from-[#a98c6c] hover:to-[#bfa77a] text-[#5c4326] font-bold py-4 px-6 rounded-lg shadow-lg border-2 border-[#d2b48c] hover:border-[#a98c6c] transform hover:scale-105 transition-all duration-300 text-xl">
+                                <span class="inline-block mr-2"></span>Back this project
                             </button>
                             <br></br>
-                            <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300 text-xl">
-                                Request to Collaborate
+                            <button class="w-full bg-gradient-to-r from-[#a98c6c] via-[#bfa77a] to-[#e9dbc2] hover:from-[#bfa77a] hover:to-[#a98c6c] text-[#5c4326] font-bold py-4 px-6 rounded-lg shadow-lg border-2 border-[#d2b48c] hover:border-[#a98c6c] transform hover:scale-105 transition-all duration-300 text-xl">
+                                <span class="inline-block mr-2"></span>Request to Collaborate
                             </button>
                             <p class="text-center text-sm text-gray-500 mt-4">
                                 All or nothing. This project will only be funded if it reaches its goal by
@@ -227,39 +228,39 @@
                 </section>
 
                 <!-- Start a Project Page (Now leads to form) -->
-                <section v-if="currentPage === 'startProject'" class="py-16 bg-white rounded-xl shadow-md p-8 text-center">
+                <section v-if="currentPage === 'startProject'" class="py-16 rounded-xl shadow-xl p-8 text-center" style="background: rgba(233,219,194,0.95);">
                     <h2 class="text-4xl font-bold text-gray-800 mb-6">Ready to Submit Your Project?</h2>
                     <p class="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
                         Share your innovative academic or creative project with the student community.
                         Get feedback, collaborate, and showcase your hard work!
                     </p>
                     <div class="flex flex-col items-center space-y-6">
-                        <div class="bg-purple-100 p-6 rounded-lg shadow-inner w-full max-w-md">
-                            <h3 class="text-2xl font-semibold text-purple-800 mb-4">How it Works:</h3>
+                        <div class="p-6 rounded-lg shadow-md w-full max-w-md" style="background: #f5e7ce; box-shadow: 0 2px 12px 0 rgba(191,167,122,0.10), 0 1.5px 8px 0 rgba(169,140,108,0.06);">
+                            <h3 class="text-2xl font-semibold text-[#855038] mb-4">How it Works:</h3>
                             <ul class="text-left text-gray-700 space-y-3">
                                 <li class="flex items-start">
-                                    <span class="text-purple-600 text-xl mr-3">💡</span>
+                                    <span class="text-[#855038] text-xl mr-3"></span>
                                     <span><strong>Prepare your project:</strong> Outline your idea, goals, and what you need.</span>
                                 </li>
                                 <li class="flex items-start">
-                                    <span class="text-purple-600 text-xl mr-3">📝</span>
+                                    <span class="text-[#855038] text-xl mr-3"></span>
                                     <span><strong>Fill out the form:</strong> Provide details and an image for your project.</span>
                                 </li>
                                 <li class="flex items-start">
-                                    <span class="text-purple-600 text-xl mr-3">🚀</span>
+                                    <span class="text-[#855038] text-xl mr-3"></span>
                                     <span><strong>Showcase & Share:</strong> Your project will be listed for others to see and support!</span>
                                 </li>
                             </ul>
                         </div>
-                        <button @click="currentPage = 'createProjectForm'" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 text-lg">
-                            Start Your Submission
+                        <button @click="currentPage = 'createProjectForm'" class="bg-gradient-to-r from-[#bfa77a] via-[#e9dbc2] to-[#a98c6c] hover:from-[#a98c6c] hover:to-[#bfa77a] text-[#5c4326] font-bold py-3 px-8 rounded-full shadow-lg border-2 border-[#d2b48c] hover:border-[#a98c6c] transform hover:scale-105 transition-all duration-300 text-lg">
+                            <span class="inline-block mr-2"></span>Start Your Submission
                         </button>
                     </div>
                 </section>
 
                 <!-- Create Project Form Page -->
-                <section v-if="currentPage === 'createProjectForm'" class="py-8 bg-white rounded-xl shadow-md p-8">
-                    <button @click="currentPage = 'startProject'" class="mb-6 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full transition-colors duration-200 flex items-center">
+                <section v-if="currentPage === 'createProjectForm'" class="py-8 rounded-xl shadow-xl p-8" style="background: rgba(233,219,194,0.95);">
+                    <button @click="currentPage = 'startProject'" class="mb-6 bg-gradient-to-r from-[#e9dbc2] to-[#bfa77a] hover:from-[#bfa77a] hover:to-[#a98c6c] text-[#5c4326] font-bold py-2 px-4 rounded-full border-2 border-[#d2b48c] hover:border-[#a98c6c] transition-colors duration-200 flex items-center">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                         Back to Submission Info
                     </button>
@@ -268,31 +269,31 @@
                         <div>
                             <label for="projectTitle" class="block text-gray-700 text-lg font-medium mb-2">Project Title</label>
                             <input type="text" id="projectTitle" v-model="newProject.title"
-                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#855038]"
                                 placeholder="e.g., AI-Powered Study Assistant" required>
                         </div>
                         <div>
                             <label for="projectDescription" class="block text-gray-700 text-lg font-medium mb-2">Project Description</label>
                             <textarea id="projectDescription" v-model="newProject.description" rows="5"
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#855038]"
                                     placeholder="Describe your project, its purpose, and what you hope to achieve..." required></textarea>
                         </div>
                         <div>
                             <label for="projectGoal" class="block text-gray-700 text-lg font-medium mb-2">Funding Goal (Optional, for conceptual support)</label>
                             <input type="number" id="projectGoal" v-model.number="newProject.goal"
-                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#855038]"
                                 placeholder="e.g., 500 (for hypothetical support/resources)">
                         </div>
                         <div>
                             <label for="projectImage" class="block text-gray-700 text-lg font-medium mb-2">Image URL</label>
                             <input type="url" id="projectImage" v-model="newProject.imageUrl"
-                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#855038]"
                                 placeholder="e.g., https://placehold.co/600x400/0000FF/FFFFFF?text=My+Project" required>
                         </div>
                         <div>
                             <label for="projectCategory" class="block text-gray-700 text-lg font-medium mb-2">Category</label>
                             <select id="projectCategory" v-model="newProject.category"
-                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                    class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#855038]"
                                     required>
                                 <option value="">Select a category</option>
                                 <option value="Technology">Technology</option>
@@ -306,32 +307,32 @@
                         <div>
                             <label for="projectCreator" class="block text-gray-700 text-lg font-medium mb-2">Your Name / Team Name</label>
                             <input type="text" id="projectCreator" v-model="newProject.creator"
-                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#855038]"
                                 placeholder="e.g., Team Innovators" required>
                         </div>
                         <button type="submit"
-                                class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all duration-300 text-lg">
-                            Submit Project
+                                class="w-full bg-gradient-to-r from-[#bfa77a] via-[#e9dbc2] to-[#a98c6c] hover:from-[#a98c6c] hover:to-[#bfa77a] text-[#5c4326] font-bold py-3 px-8 rounded-full shadow-lg border-2 border-[#d2b48c] hover:border-[#a98c6c] transform hover:scale-105 transition-all duration-300 text-lg">
+                            <span class="inline-block mr-2"></span>Submit Project
                         </button>
                     </form>
                 </section>
 
                 <!-- About Us Page -->
-                <section v-if="currentPage === 'aboutUs'" class="py-16 bg-white rounded-xl shadow-md p-8 text-center">
+                <section v-if="currentPage === 'aboutUs'" class="py-16 rounded-xl shadow-xl p-8 text-center" style="background: rgba(233,219,194,0.95);">
                     <h2 class="text-4xl font-bold text-gray-800 mb-6">About the Student Project Hub</h2>
                     <p class="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
                         This platform is a conceptual demonstration of a community hub for student projects, built with Vue.js and Tailwind CSS.
                         It aims to inspire, showcase, and connect students working on innovative ideas.
                     </p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
-                        <div class="bg-gray-50 p-6 rounded-lg shadow-inner">
+                        <div class="p-6 rounded-lg shadow-md" style="background: #f5e7ce; box-shadow: 0 2px 12px 0 rgba(191,167,122,0.10), 0 1.5px 8px 0 rgba(169,140,108,0.06);">
                             <h3 class="text-2xl font-semibold text-gray-800 mb-3">Our Vision</h3>
                             <p class="text-gray-700">
                                 To foster a vibrant ecosystem where student creativity and academic excellence can flourish.
                                 We envision a space where ideas are shared, collaborations are formed, and projects gain visibility.
                             </p>
                         </div>
-                        <div class="bg-gray-50 p-6 rounded-lg shadow-inner">
+                        <div class="p-6 rounded-lg shadow-md" style="background: #f5e7ce; box-shadow: 0 2px 12px 0 rgba(191,167,122,0.10), 0 1.5px 8px 0 rgba(169,140,108,0.06);">
                             <h3 class="text-2xl font-semibold text-gray-800 mb-3">Technologies Used</h3>
                             <ul class="list-disc list-inside text-gray-700 space-y-2">
                                 <li><strong>Vue.js 3:</strong> For reactive components and dynamic content.</li>
@@ -344,8 +345,8 @@
                 </section>
 
                 <!-- Privacy Policy Page -->
-                <section v-if="currentPage === 'privacyPolicy'" class="py-8 bg-white rounded-xl shadow-md p-8">
-                    <button @click="currentPage = 'home'" class="mb-6 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full transition-colors duration-200 flex items-center">
+                <section v-if="currentPage === 'privacyPolicy'" class="py-8 rounded-xl shadow-xl p-8" style="background: rgba(233,219,194,0.95);">
+                    <button @click="currentPage = 'home'" class="mb-6 bg-gradient-to-r from-[#e9dbc2] to-[#bfa77a] hover:from-[#bfa77a] hover:to-[#a98c6c] text-[#5c4326] font-bold py-2 px-4 rounded-full border-2 border-[#d2b48c] hover:border-[#a98c6c] transition-colors duration-200 flex items-center">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                         Back to Home
                     </button>
@@ -363,8 +364,8 @@
                 </section>
 
                 <!-- Terms of Service Page -->
-                <section v-if="currentPage === 'termsOfService'" class="py-8 bg-white rounded-xl shadow-md p-8">
-                    <button @click="currentPage = 'home'" class="mb-6 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full transition-colors duration-200 flex items-center">
+                <section v-if="currentPage === 'termsOfService'" class="py-8 rounded-xl shadow-xl p-8" style="background: rgba(233,219,194,0.95);">
+                    <button @click="currentPage = 'home'" class="mb-6 bg-gradient-to-r from-[#e9dbc2] to-[#bfa77a] hover:from-[#bfa77a] hover:to-[#a98c6c] text-[#5c4326] font-bold py-2 px-4 rounded-full border-2 border-[#d2b48c] hover:border-[#a98c6c] transition-colors duration-200 flex items-center">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                         Back to Home
                     </button>
@@ -384,8 +385,8 @@
                 </section>
 
                 <!-- Contact Us Page -->
-                <section v-if="currentPage === 'contactUs'" class="py-8 bg-white rounded-xl shadow-md p-8">
-                    <button @click="currentPage = 'home'" class="mb-6 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-full transition-colors duration-200 flex items-center">
+                <section v-if="currentPage === 'contactUs'" class="py-8 rounded-xl shadow-xl p-8" style="background: rgba(233,219,194,0.95);">
+                    <button @click="currentPage = 'home'" class="mb-6 bg-gradient-to-r from-[#e9dbc2] to-[#bfa77a] hover:from-[#bfa77a] hover:to-[#a98c6c] text-[#5c4326] font-bold py-2 px-4 rounded-full border-2 border-[#d2b48c] hover:border-[#a98c6c] transition-colors duration-200 flex items-center">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                         Back to Home
                     </button>
@@ -399,7 +400,7 @@
                 </section>
 
                 <!-- Leaderboard Page -->
-                <section v-if="currentPage === 'leaderboard'" class="py-8 bg-white rounded-xl shadow-md p-8">
+                <section v-if="currentPage === 'leaderboard'" class="py-8 rounded-xl shadow-xl p-8" style="background: rgba(233,219,194,0.95);">
                     <h2 class="text-4xl font-bold text-gray-800 mb-10 text-center">Project Leaderboard</h2>
 
                     <!-- Top Projects -->
@@ -408,15 +409,15 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             <div v-for="(project, index) in topProjects" :key="project.id"
                                  @click="viewProject(project)"
-                                 class="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer border border-gray-200 hover:border-purple-400">
+                                 class="bg-[#f5e7ce] p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer border border-[#e2d3b1] hover:border-[#bfa77a]">
                                 <div class="flex items-center mb-4">
-                                    <span class="text-2xl font-bold text-purple-600 mr-3">#{{ index + 1 }}</span>
+                                    <span class="text-2xl font-bold text-[#855038] mr-3">#{{ index + 1 }}</span>
                                     <h4 class="text-xl font-semibold text-gray-800 truncate" :title="project.title">{{ project.title }}</h4>
                                 </div>
                                 <p class="text-sm text-gray-600 mb-1">Creator: {{ project.creator }}</p>
-                                <p class="text-lg font-bold text-green-600 mb-2">${{ project.raised.toLocaleString() }} <span class="text-sm font-normal text-gray-500">raised of ${{ project.goal.toLocaleString() }}</span></p>
+                                <p class="text-lg font-bold text-[#855038] mb-2">${{ project.raised.toLocaleString() }} <span class="text-sm font-normal text-gray-500">raised of ${{ project.goal.toLocaleString() }}</span></p>
                                 <div class="w-full bg-gray-200 rounded-full h-2.5 mb-1">
-                                    <div class="bg-green-500 h-2.5 rounded-full" :style="{ width: Math.min(100, (project.raised / project.goal * 100)) + '%' }"></div>
+                                    <div class="bg-[#855038] h-2.5 rounded-full" :style="{ width: Math.min(100, (project.raised / project.goal * 100)) + '%' }"></div>
                                 </div>
                                 <p class="text-xs text-gray-500">{{ Math.ceil((project.raised / project.goal) * 100) }}% funded | {{ project.backers }} backers | {{ project.daysLeft }} days left</p>
                             </div>
@@ -426,30 +427,29 @@
 
                     <!-- Placeholder for Top Investors & Charts -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="bg-gray-50 p-6 rounded-lg shadow-md">
-                            <h3 class="text-2xl font-semibold text-gray-700 mb-4">Top Investors (Conceptual)</h3>
+                        <div class="p-6 rounded-lg shadow-md" style="background: #f5e7ce; box-shadow: 0 2px 12px 0 rgba(191,167,122,0.10), 0 1.5px 8px 0 rgba(169,140,108,0.06);">
+                            <h3 class="text-2xl font-semibold text-gray-700 mb-4">Top Investors</h3>
                             <ul class="space-y-3">
-                                <li v-for="i in 5" :key="'investor-' + i" class="flex justify-between items-center p-3 bg-white rounded shadow-sm">
-                                    <span class="text-gray-700 font-medium">Investor #{{ i }}</span>
-                                    <span class="text-purple-600 font-semibold">${{ (100000 / i).toLocaleString() }} (Demo)</span>
+                                <li v-for="i in 5" :key="'investor-' + i" class="flex justify-between items-center p-3 rounded shadow-sm" style="background: rgb(245, 231, 206); box-shadow: rgba(191, 167, 122, 0.1) 0px 2px 12px 0px, rgba(169, 140, 108, 0.06) 0px 1.5px 8px 0px;">
+                                    <span class="text-[#855038]font-medium">Investor #{{ i }}</span>
+                                    <span class="text-[#855038] font-semibold">${{ (100000 / i).toLocaleString() }} (Demo)</span>
                                 </li>
                             </ul>
                         </div>
-                        <div class="bg-gray-50 p-6 rounded-lg shadow-md">
-                            <h3 class="text-2xl font-semibold text-gray-700 mb-4">Project Categories (Chart Placeholder)</h3>
+                        <div class="p-6 rounded-lg shadow-md" style="background: #f5e7ce; box-shadow: 0 2px 12px 0 rgba(191,167,122,0.10), 0 1.5px 8px 0 rgba(169,140,108,0.06);">
+                            <h3 class="text-2xl font-semibold text-[#855038] mb-4">Project Categories</h3>
                             <div class="space-y-2">
                                 <div v-for="cat in ['Technology', 'Environmental', 'Arts', 'Engineering', 'Health']" :key="cat" class="w-full bg-gray-200 rounded-full">
-                                    <div class="bg-indigo-500 text-xs font-medium text-blue-100 text-center p-1 leading-none rounded-full" :style="{ width: (Math.random()*80 + 20) + '%' }"> {{ cat }} </div>
+                                    <div class="bg-[#855038] text-xs font-medium text-blue-100 text-center p-1 leading-none rounded-full" :style="{ width: (Math.random()*80 + 20) + '%' }"> {{ cat }} </div>
                                 </div>
                             </div>
-                             <p class="text-xs text-gray-500 mt-3 text-center">Note: Chart data is randomly generated for demonstration.</p>
                         </div>
                     </div>
                 </section>
             </main>
 
             <!-- Footer -->
-            <footer class="bg-gray-800 text-white p-6 text-center mt-auto rounded-t-xl shadow-inner">
+            <footer class="bg-gradient-to-r from-[#bfa77a] via-[#a98c6c] to-[#7d5c36] text-white p-6 text-center mt-auto rounded-t-xl shadow-xl" style="box-shadow: 0 6px 24px 0 rgba(165,117,77,0.18), 0 1.5px 8px 0 rgba(185,144,62,0.08);">
                 <div class="container mx-auto">
                     <p>&copy; 2025 Student Project Hub. All rights reserved. Built with Vue.js & Tailwind CSS.</p>
                     <div class="flex justify-center space-x-6 mt-4">
